@@ -49,6 +49,14 @@ export {
 } from './context-compiler/index.js';
 export type { ScoreBreakdown, ScoringContext, ScoringResult } from './context-compiler/index.js';
 
+// Context Compiler — Assembly
+export { compile, expandGraphContext } from './context-compiler/index.js';
+export type { CompileOptions, CompileDebugTrace } from './context-compiler/index.js';
+
+// Context Compiler — Packing & Formatting
+export { packIntoBudget, estimateTokens } from './context-compiler/index.js';
+export { formatAsMarkdown, formatAsJson } from './context-compiler/index.js';
+
 // Decision Graph — CRUD + traversal
 export {
   createDecision,

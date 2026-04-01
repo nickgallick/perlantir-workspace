@@ -142,13 +142,26 @@ Phase 1B (9 files) scoped but not started. See `projects/NEXUS-CAPABILITY-LAYER-
 - Tests: 43 new (exact calcs, role-differentiation proof, fallbacks, determinism), 90 total, all pass
 - No deviations
 
-### Day 4 Target: Context Compiler — Assembly
+### Day 4: Context Compiler — Assembly — COMPLETE (2026-04-02 03:52 UTC+8)
 
-1. `expandGraphContext()` — graph expansion with score decay (0.6^depth)
-2. `packIntoBudget()` — token budget packing (notifications 10%, decisions 55%, artifacts 30%, sessions remainder)
-3. `formatAsMarkdown()` / `formatAsJson()` — output formatters
-4. Full `compile()` pipeline
-5. Tests against real DB with graph + scoring integration
+- `compile()`: Full 10-step pipeline (fetch → score → expand → pack → format)
+- `expandGraphContext()`: graph expansion with 0.6^depth score decay, skip-if-higher
+- `packIntoBudget()`: priority cascade (10/55/30/5), overflow, relevanceThreshold tracking
+- `formatAsMarkdown()` / `formatAsJson()`: output formatters, BUG-4/BUG-5 fixes applied
+- Tests: 25 new (8 packer + 5 formatter + 12 integration), 115 total, all pass
+- Role-differentiated context proven: same project, 3 agents (builder/launch/reviewer), different packages
+- Determinism proven: same input → identical output (with fixed `now`)
+- Deviations: 1 (freshness drift in determinism test — test isolation fix, not code bug)
+
+### Operator Correction (2026-04-02 03:45 UTC+8)
+Completion standard tightened: detect → resolve/classify → re-run verification → declare with clean state. No phase marked complete with unresolved signals. Enforced going forward.
+
+### Day 5 Target: Critical Test + Change Propagator
+
+1. THE scenario test: 3 agents, 10 decisions → compile each → verify different context
+2. `ChangePropagator` class from §10
+3. Subscription management
+4. Role-differentiated notifications
 
 ---
 
