@@ -1,5 +1,20 @@
 # MEMORY.md
 
+## Operating Rules
+
+### Auto-State-Preservation (Effective 2026-04-02)
+
+After any meaningful completed task, update project state files before reporting completion.
+
+**Minor task** → `STATUS.md` only.
+**Material state change** (phase completion, blocker resolution, approval, architecture change, decision) → full pass: `STATUS.md`, `CHECKPOINT.md`, `DECISIONS.md` (if decision changed), `SESSION-HANDOFF`, `MEMORY.md` (if durable memory changed).
+
+Every completion report ends with a **State Preservation** section listing files updated, why, and confirming handoff/memory currency.
+
+Do not rewrite files unnecessarily. Do not perform shallow/generic updates. Each update must capture: what completed, what changed, what is now true, what remains blocked/unblocked, exact next step, downstream agent impact.
+
+---
+
 ## Operator Context
 
 **Nick Gallick**
@@ -56,99 +71,95 @@ Integrated 6 high-value execution mechanics into `standards/ENGINEERING-EXECUTIO
 
 ## First Project: Nexus v1
 
-**Status**: Confirmed as the first real project. No execution has started.
+**Status**: Day 1 implementation COMPLETE. Ready for Day 2.
 
-**What Nexus is**: The first project to be executed under the full Perlantir governance system. Will instantiate the first CHECKPOINT.md, exercise all write triggers, and prove the system works in practice.
+**What Nexus is**: Decision-aware context compilation for multi-agent teams. TypeScript library + REST API + SDK. First project under full Perlantir governance.
 
-**Capability Layer Planning**: A Specialist Capability Layer was designed (85 files across 11 agents, 4 phases). Decision: do NOT build generic capability files before knowing the project. Build only Nexus-specific capability assets that are clearly justified by what Nexus needs. Avoid premature abstraction and generic "best practices" documents.
+**Code location**: `workspace/nexus/` (Turborepo + pnpm monorepo)
 
-**Next step**: Plan a Nexus-specific capability layer before implementation begins. Only build assets that directly serve Nexus execution — decision frameworks, templates, and rubrics the build agents will actually use for this project.
+---
 
-**What is deferred**: Generic capability files, repo cloning/downloading, and stack-specific external resource expansion — unless clearly justified by Nexus needs.
+## Nexus Locked Decisions
+
+- **AMB-1 RESOLVED (LOCKED):** Raw `pg` (node-postgres) with `pg.Pool`. No `@supabase/supabase-js`. Approved 2026-04-01. All code and capability files reflect this.
+- **Stack:** TypeScript strict, Node.js 22, PostgreSQL 16 + pgvector, Hono, Vitest, Turborepo + pnpm, Docker compose (2 services)
+- **Full locked decisions list:** `agents/architect/capabilities/NEXUS-LOCKED-DECISIONS.md`
+
+---
+
+## Nexus Build Progress
+
+### Capability Layer — Phase 1A: COMPLETE (2026-04-01)
+
+15 files: 4 shared (`projects/nexus-v1/shared/`) + 11 agent capabilities (`agents/<agent>/capabilities/`).
+
+Phase 1B (9 files) scoped but not started. See `projects/NEXUS-CAPABILITY-LAYER-PLAN.md`.
+
+### Day 1 Implementation: COMPLETE (2026-04-02 01:14 UTC+8)
+
+- 3 packages scaffold: core (active), server (stubs), sdk (stubs)
+- `types.ts`: all Nexus types, NexusConfig with databaseUrl
+- `roles.ts`: 8 role templates, BUG-2 fixed
+- `db/client.ts`: pg.Pool createPool + healthCheck
+- `relevance.ts`: OpenAI embedder + cosine similarity
+- `001_initial_schema.sql`: 9 tables, 2 functions, 3 triggers (not yet applied to DB)
+- Build: 3/3 packages, zero errors
+- Tests: 19/19 pass (17 core + 2 placeholders)
+- Deviations: corepack→npm global install, TS strict mode fix in roles.ts
+
+### Day 2 Target: Decision Graph
+
+1. Node.js migration runner (apply schema via pg.Pool — no psql in container)
+2. Decision CRUD (create with embedding, read, list, update status)
+3. Edge CRUD (create, list by decision)
+4. Graph traversal (call `get_connected_decisions` via pool.query)
+5. Integration tests against real pgvector Postgres
+
+Requires: running PostgreSQL with pgvector accessible via DATABASE_URL.
+
+---
+
+## Remaining Ambiguities (Non-Blocking)
+
+- AMB-2: No session summary routes — sessions opt-in/post-launch
+- AMB-3: API key auth middleware — open design, needed Day 8+
+- AMB-4: PackResult import location — trivial
+- AMB-5: WebSocket handler — open design, needed Day 5+
+
+## Known Spec Bugs (5, All Documented)
+
+In `agents/backend/capabilities/NEXUS-KNOWN-SPEC-ISSUES.md`:
+1. Missing comma in expandGraphContext (§7)
+2. Truncated role tag arrays in computeRoleRelevance (§7)
+3. Truncated computeFreshness divisor (§7)
+4. Truncated template literals in formatter (§9)
+5. Truncated .join() calls in packer (§8)
 
 ---
 
 ## What Exists Now
 
 ```
+workspace/nexus/               Monorepo (3 packages, builds clean, 19 tests pass)
 workspace/enterprise/          5 files (all substantive)
-workspace/agents/              12 agent directories (each with AGENT.md + Governing Standards section)
-                               + COORDINATION.md (centralized inter-specialist rules)
+workspace/agents/              12 agent dirs + COORDINATION.md; 7 have capabilities/ subdirs
 workspace/workflows/           10 workflows (01–10)
 workspace/standards/           17 files
-workspace/memory/              3 convention files + daily log + session handoff
-workspace/projects/.template/  5 files
+workspace/memory/              Convention files + daily log + session handoff
+workspace/projects/nexus-v1/   STATUS, CHECKPOINT, DECISIONS, DAY-1-IMPLEMENTATION-PLAN,
+                               AMB-1 decision artifact, shared/ (4), spec
+workspace/projects/            NEXUS-CAPABILITY-LAYER-PLAN.md
 ```
 
-Root: AGENTS.md, SOUL.md, USER.md, IDENTITY.md, TOOLS.md, HEARTBEAT.md, MEMORY.md, BOOT.md
-
 ---
 
-## Approved vs. Not Approved
+## Deferred (Lower Priority)
 
-**Approved and complete**: All build phases, Correction Phases 1, 2A, 2B.
-
-**Not yet approved**:
-- Nexus v1 execution — confirmed as next project, no phase approved yet
-- Nexus-specific capability layer — planning pass needed before execution
-- Remaining lower-priority corrections (see below)
-
----
-
-## Remaining Corrections (Lower Priority, Deferred)
-
-1. Consolidate VERIFICATION-STANDARD into DEFINITION-OF-DONE (merge, manifest 16→15)
-2. Merge POSTMORTEM-AND-LEARNING and LESSONS-LEARNED-FORMAT (merge, manifest change)
-3. Tighten SESSION-HANDOFF-FORMAT.md (~483→~250 lines)
-4. Merge MEMORY-RULES.md into MEMORY-CONVENTIONS.md (Tier 1 count 27→26)
-
-These are cleanliness fixes. The system is operationally sound without them.
-
----
-
-## Known Issues
-
-1. **MEMORY-RULES / MEMORY-CONVENTIONS overlap**: ~60% restatement. Deferred.
-2. **VERIFICATION-STANDARD / DEFINITION-OF-DONE overlap**: Both partially define completion evidence. Deferred.
-3. **No active project CHECKPOINTs**: Infrastructure ready, no projects in execution.
-4. **IDENTITY.md, TOOLS.md, BOOT.md unpopulated**: Low priority.
-
----
-
-## Nexus Capability Layer — Phase 1A Complete (2026-04-01)
-
-**15 files built.** Approved and executed in single phase.
-
-### Shared (4 files) — `projects/nexus-v1/shared/`
-- NEXUS-ARCHITECTURE-GLOSSARY.md — canonical terms
-- NEXUS-SPEC-INDEX.md — concept → spec section quick-reference
-- NEXUS-IMPLEMENTATION-CONSTRAINTS.md — runtime + locked stack decisions
-- NEXUS-SUCCESS-RUBRIC.md — 5 launch success criteria
-
-### Agent Capabilities (11 files) — `agents/<agent>/capabilities/`
-- Architect: NEXUS-ARCHITECTURE-BRIEF.md, NEXUS-LOCKED-DECISIONS.md
-- Backend: NEXUS-SPEC-TO-CODE-MAP.md, NEXUS-KNOWN-SPEC-ISSUES.md, NEXUS-ALGORITHM-REFERENCE.md
-- Product: NEXUS-SCOPE-BOUNDARY.md
-- DevOps: NEXUS-INFRASTRUCTURE-SPEC.md
-- Security: NEXUS-THREAT-MODEL.md
-- QA: NEXUS-TEST-PLAN.md, NEXUS-SCENARIO-DEFINITIONS.md
-- Docs: NEXUS-KEY-MESSAGING.md
-
-### Spec relocated to `projects/nexus-v1/nexus-v1-spec.txt`
-
-### Full planning pass at `projects/NEXUS-CAPABILITY-LAYER-PLAN.md`
-Contains Phase 1B (9 files) and 1C (deferred) scope.
-
-### Key Spec Issues Discovered
-- AMB-1: Supabase client vs raw pg — spec uses Supabase JS syntax but Docker connects to raw Postgres. OPEN architectural decision
-- 5 confirmed code bugs documented in KNOWN-SPEC-ISSUES.md (missing comma, truncated lines)
-- 5 ambiguities documented (session routes missing, API key auth not implemented, WS handler not specified, PackResult import unclear)
-
-## Recommended Next Step
-
-Either:
-1. Approve Phase 1B (9 more capability files) — deeper preparation
-2. Approve project instantiation (BRIEF, PLAN, CHECKPOINT, STATUS, DECISIONS from .template/) — begin Nexus execution setup
-3. Begin Nexus implementation directly — Phase 1A provides enough foundation
+1. Consolidate VERIFICATION-STANDARD into DEFINITION-OF-DONE
+2. Merge POSTMORTEM-AND-LEARNING and LESSONS-LEARNED-FORMAT
+3. Tighten SESSION-HANDOFF-FORMAT.md
+4. Merge MEMORY-RULES.md into MEMORY-CONVENTIONS.md
+5. Phase 1B capability files (9, scoped, not started)
+6. IDENTITY.md, BOOT.md still minimal
 
 Nick decides scope. No phase starts without approval.

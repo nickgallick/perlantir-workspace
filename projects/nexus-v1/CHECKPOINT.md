@@ -83,7 +83,7 @@ recovery-mode       : NORMAL
 All documented in: `agents/backend/capabilities/NEXUS-KNOWN-SPEC-ISSUES.md`
 
 ### Ambiguities (5)
-1. **AMB-1: Supabase client vs. raw PostgreSQL — BLOCKING** (decision artifact pending)
+1. **AMB-1: Supabase client vs. raw PostgreSQL — RESOLVED** (raw pg driver adopted, see Resolved Blockers)
 2. AMB-2: No API routes for session summaries — non-blocking (sessions are opt-in/post-launch)
 3. AMB-3: API key auth middleware not implemented in spec — non-blocking (open design decision)
 4. AMB-4: `PackResult` import location unclear — non-blocking (trivial to resolve)
