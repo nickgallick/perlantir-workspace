@@ -12,7 +12,7 @@
 | 3 | Scoring Layer (5 signals, role-differentiated) | 43 | LOCKED |
 | 4 | Assembly (compile pipeline, packer, formatter, graph expansion) | 25 | COMPLETE |
 
-**Total**: 115/115 tests pass, 3/3 packages build clean.
+**Total**: 126/126 tests pass (6 test files), 3/3 packages build clean.
 
 ## Key Decisions (All Locked)
 
@@ -47,6 +47,13 @@ nexus/packages/core/src/
 4. Role-differentiated notifications
 
 Requires explicit approval.
+
+## Proof Lock
+
+Core product claim permanently protected:
+- `projects/nexus-v1/ROLE-DIFFERENTIATION-PROOF.md` — exact fixtures, outputs, analysis
+- `packages/core/tests/role-differentiation.test.ts` — 11 regression assertions
+- Any change that breaks role-differentiated scoring will fail the build
 
 ## Known Issues
 

@@ -8,7 +8,7 @@
 ## Build Health
 
 - **Build**: 3/3 packages, zero errors
-- **Tests**: 115/115 pass (5 test files)
+- **Tests**: 126/126 pass (6 test files)
 - **Regressions**: None
 
 ## Completed Days
@@ -30,3 +30,9 @@ Full context compiler assembly layer:
 - Role-differentiated context proven (same project, 3 agents, different packages)
 - Determinism proven (same input → identical output)
 - Debug trace for full pipeline visibility
+
+## Proof Lock (Post Day 4)
+
+- `ROLE-DIFFERENTIATION-PROOF.md` — permanent artifact with exact fixtures, outputs, and analysis
+- `role-differentiation.test.ts` — 11 regression assertions protecting core product claim
+- Proof is durable, replayable, and protected from silent regression

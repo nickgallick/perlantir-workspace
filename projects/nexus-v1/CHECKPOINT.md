@@ -50,10 +50,14 @@ recovery-mode       : NORMAL
 **Tests:**
 - [x] `packages/core/tests/compiler.test.ts` — 25 tests (8 packer, 5 formatter, 12 integration)
 
+**Proof Lock:**
+- [x] `projects/nexus-v1/ROLE-DIFFERENTIATION-PROOF.md` — Permanent artifact: fixtures, outputs, analysis
+- [x] `packages/core/tests/role-differentiation.test.ts` — 11 regression assertions
+
 ### Verification
 
 - Build: 3/3 packages, zero TypeScript errors
-- Tests: 115/115 pass (17 setup + 3 migrator + 27 decision-graph + 43 scoring + 25 compiler)
+- Tests: 126/126 pass (17 setup + 3 migrator + 27 decision-graph + 43 scoring + 25 compiler + 11 role-differentiation)
 - No regressions in any prior test file
 
 ---

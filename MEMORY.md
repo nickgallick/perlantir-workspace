@@ -152,6 +152,8 @@ Phase 1B (9 files) scoped but not started. See `projects/NEXUS-CAPABILITY-LAYER-
 - Role-differentiated context proven: same project, 3 agents (builder/launch/reviewer), different packages
 - Determinism proven: same input → identical output (with fixed `now`)
 - Deviations: 1 (freshness drift in determinism test — test isolation fix, not code bug)
+- Proof lock: `ROLE-DIFFERENTIATION-PROOF.md` + `role-differentiation.test.ts` (11 assertions)
+- Total after proof lock: 126 tests, 6 test files
 
 ### Operator Correction (2026-04-02 03:45 UTC+8)
 Completion standard tightened: detect → resolve/classify → re-run verification → declare with clean state. No phase marked complete with unresolved signals. Enforced going forward.
