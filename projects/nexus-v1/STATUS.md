@@ -2,33 +2,33 @@
 
 ## Current Phase
 
-Day 2 Implementation — **COMPLETE**
+Day 3 Implementation — **COMPLETE**
 
 ## Health
 
-**Green** — Monorepo builds (3/3), all tests pass (47/47), schema applied to live PostgreSQL.
+**Green** — Monorepo builds (3/3), all tests pass (90/90).
 
 ## Progress
 
 - Capability layer: 100% (15/15 files)
 - Day 1 implementation: 100% (13/13 tasks)
 - Day 2 implementation: 100% (5/5 deliverables)
-- Implementation: Days 1-2 of 15 complete
+- Day 3 implementation: 100% (scoring layer complete)
+- Implementation: Days 1-3 of 15 complete
 
 ## Last Updated
 
-2026-04-02 02:22 UTC+8
+2026-04-02 03:10 UTC+8
 
 ## Recent Activity
 
-- Migration runner implemented (Node.js-based, no psql dependency)
-- Decision CRUD: create (with optional embedding), read, list (with filters), update status
-- Edge CRUD: create, list by source/target/decision, delete, list by relationship
-- Graph traversal: `getConnectedDecisions` (recursive via SQL function), `getProjectGraph`
-- Fixed schema `get_connected_decisions` for PostgreSQL 17 compatibility (LATERAL JOIN pattern)
-- PostgreSQL 17 + pgvector 0.8.0 installed and running inside container (dev environment)
-- 30 new tests (3 migrator + 27 decision-graph integration)
-- All 47 tests pass, 3 packages build clean
+- Context Compiler scoring layer: all 5 signals implemented per ALGORITHM-REFERENCE.md
+- Pure functions: computeDirectAffect, computeTagMatching, computeRoleRelevance, computeSemanticSimilarity, computeFreshness
+- Status penalty: superseded (0.4/0.1), reverted (0.05), active/pending (1.0)
+- Combined score: min(1.0, relevance×0.7 + freshness×0.3)
+- Debug mode: per-decision score breakdown logging
+- 43 new scoring tests (exact calculations, role-differentiation proof, missing-signal fallbacks, determinism)
+- All 90 tests pass, 3 packages build clean
 
 ## Resolved Blockers
 
@@ -41,9 +41,9 @@ Day 2 Implementation — **COMPLETE**
 
 ## Next Steps
 
-1. Day 3: Context Compiler — Scoring (`scoreDecisions`, freshness, role relevance)
-2. Day 4: Context Compiler — Assembly (expand, pack, format)
-3. Day 5: Critical Test + Change Propagator
+1. Day 4: Context Compiler — Assembly (expandGraphContext, packIntoBudget, formatAsMarkdown/Json)
+2. Day 5: Critical Test + Change Propagator
+3. Days 6-10: Server, SDK, Demo, Docker
 
 ## Notes
 

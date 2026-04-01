@@ -118,13 +118,24 @@ Phase 1B (9 files) scoped but not started. See `projects/NEXUS-CAPABILITY-LAYER-
 - Tests: 30 new (3 migrator + 27 decision-graph integration), 47 total, all pass
 - Deviations: PG17 instead of PG16, container-local DB, schema CTE fix, fileParallelism:false
 
-### Day 3 Target: Context Compiler — Scoring
+### Day 3: Context Compiler — Scoring — COMPLETE (2026-04-02 03:10 UTC+8)
 
-1. `scoreDecisions()` with all 5 signals
-2. `computeFreshness()`
-3. `computeRoleRelevance()`
-4. `cosineSimilarity()` integration with scored decisions
-5. Tests: security decision → reviewer HIGH, marketing decision → launch HIGH
+- All 5 scoring signals implemented per ALGORITHM-REFERENCE.md (exact formula match)
+- Pure functions in `scoring.ts`: directAffect, tagMatching, roleRelevance, semanticSimilarity, freshness
+- Status penalty: superseded (0.4 if included, 0.1 if not), reverted (0.05)
+- Combined = min(1.0, relevance×0.7 + freshness×0.3)
+- Debug mode: per-decision score breakdown log lines
+- roleTagMap threshold: weight ≥ 0.8 (matches worked examples)
+- Tests: 43 new (exact calcs, role-differentiation proof, fallbacks, determinism), 90 total, all pass
+- No deviations
+
+### Day 4 Target: Context Compiler — Assembly
+
+1. `expandGraphContext()` — graph expansion with score decay (0.6^depth)
+2. `packIntoBudget()` — token budget packing (notifications 10%, decisions 55%, artifacts 30%, sessions remainder)
+3. `formatAsMarkdown()` / `formatAsJson()` — output formatters
+4. Full `compile()` pipeline
+5. Tests against real DB with graph + scoring integration
 
 ---
 

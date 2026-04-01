@@ -35,6 +35,20 @@ export {
 } from './context-compiler/index.js';
 export type { EmbeddingFn } from './context-compiler/index.js';
 
+// Context Compiler — Scoring
+export {
+  scoreDecision,
+  scoreDecisions,
+  computeDirectAffect,
+  computeTagMatching,
+  computeRoleRelevance,
+  computeSemanticSimilarity,
+  computeStatusPenalty,
+  computeFreshness,
+  getRoleTagMap,
+} from './context-compiler/index.js';
+export type { ScoreBreakdown, ScoringContext, ScoringResult } from './context-compiler/index.js';
+
 // Decision Graph — CRUD + traversal
 export {
   createDecision,
