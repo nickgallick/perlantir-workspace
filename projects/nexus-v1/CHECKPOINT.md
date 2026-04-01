@@ -6,10 +6,10 @@
 
 ```
 schema-version      : 1.0.0
-checkpoint-id       : 002
-prior-checkpoint-id : 001
+checkpoint-id       : 003
+prior-checkpoint-id : 002
 last-writer         : Governor
-last-updated        : 2026-04-01 23:57 UTC+8
+last-updated        : 2026-04-02 01:14 UTC+8
 active-owner        : Governor
 lock-status         : UNLOCKED
 ```
@@ -99,8 +99,27 @@ All documented in: `agents/backend/capabilities/NEXUS-KNOWN-SPEC-ISSUES.md`
 
 ---
 
+## Completed Phases
+
+**Day 1 Implementation** — COMPLETE 2026-04-02 01:14 UTC+8
+
+Deliverables:
+- [x] Monorepo root (package.json, pnpm-workspace.yaml, turbo.json, .gitignore, .env.example, LICENSE)
+- [x] @nexus-ai/core package scaffold + implementation (types.ts, roles.ts, db/client.ts, relevance.ts, barrel exports)
+- [x] @nexus-ai/server package scaffold (stubs)
+- [x] @nexus-ai/sdk package scaffold (stubs)
+- [x] Database schema (001_initial_schema.sql — 9 tables, 2 functions, 3 triggers)
+- [x] 17 core smoke tests passing (roles, cosine similarity, pool creation)
+- [x] 3-package turbo build: zero errors
+- [x] 3-package turbo test: 19 tests, all pass
+
+Deviations from plan:
+- T1: corepack needed elevated permissions; used `npm install -g pnpm` instead (functionally equivalent)
+- T6: Build failed initially because source files didn't exist yet; resolved by implementing T7-T11 first then building
+- roles.ts: TypeScript strict mode caught Partial<Record> spread issue; fixed with explicit undefined filtering
+
 ## Next Phase
 
-**Day 1 Implementation** — monorepo setup, types, roles, DB schema, pg pool, embeddings.
+**Day 2 Implementation** — Decision CRUD, edge CRUD, graph traversal, decision-graph tests.
 
-Implementation plan: `projects/nexus-v1/DAY-1-IMPLEMENTATION-PLAN.md`
+Implementation plan: `projects/nexus-v1/DAY-1-IMPLEMENTATION-PLAN.md` (Day 2 section in NEXUS-SPEC-TO-CODE-MAP.md)

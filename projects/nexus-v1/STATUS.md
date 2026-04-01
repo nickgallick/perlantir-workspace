@@ -2,31 +2,30 @@
 
 ## Current Phase
 
-Phase 1A: Capability Layer — **COMPLETE**
+Day 1 Implementation — **COMPLETE**
 
 ## Health
 
-**Green** — AMB-1 resolved. Ready for implementation.
+**Green** — Monorepo builds, all tests pass, ready for Day 2.
 
 ## Progress
 
 - Capability layer: 100% (15/15 files)
-- Project instantiation: In progress (STATUS, CHECKPOINT, DECISIONS created)
-- Implementation: 0% — not started, blocked
+- Day 1 implementation: 100% (13/13 tasks)
+- Implementation: Day 1 of 15 complete
 
 ## Last Updated
 
-2026-04-01 23:10 UTC+8
+2026-04-02 01:14 UTC+8
 
 ## Recent Activity
 
-- Full 56-page spec ingested and analyzed
-- Planning pass completed → `projects/NEXUS-CAPABILITY-LAYER-PLAN.md`
-- Phase 1A approved and executed: 15 capability files across 4 shared + 7 agent directories
-- 5 confirmed spec code bugs documented in `agents/backend/capabilities/NEXUS-KNOWN-SPEC-ISSUES.md`
-- 5 ambiguities documented, AMB-1 identified as blocking
-- Spec relocated to `projects/nexus-v1/nexus-v1-spec.txt`
-- MEMORY.md updated with Phase 1A state
+- Day 1 implementation executed: monorepo scaffolded, all 3 packages build, types/roles/db/embeddings implemented
+- 19 tests pass across 3 packages (17 core + 2 placeholders)
+- pnpm installed globally (corepack needed elevated permissions — documented deviation)
+- TypeScript strict mode compatibility fix in roles.ts (Partial override handling)
+- Database schema ready at `supabase/migrations/001_initial_schema.sql`
+- pg.Pool wrapper implemented at `packages/core/src/db/client.ts`
 
 ## Resolved Blockers
 
@@ -38,9 +37,9 @@ Phase 1A: Capability Layer — **COMPLETE**
 
 ## Next Steps
 
-1. Day 1 implementation (monorepo setup, types, roles, DB schema, embeddings, pg pool)
-2. Optionally: Phase 1B (9 capability files) in parallel or after implementation starts
-3. Implementation Phase 2 (Week 1 core build: Days 1-5)
+1. Day 2: Decision Graph — CRUD + edges + graph traversal + tests
+2. Optionally: Phase 1B (9 capability files) in parallel
+3. Continue Week 1 core build: Days 3-5
 
 ## Notes
 

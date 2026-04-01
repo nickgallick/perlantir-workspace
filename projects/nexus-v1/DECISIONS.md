@@ -66,3 +66,19 @@
 **Reversibility:** Medium. Switching back to Supabase client would require rewriting all queries again. Unlikely to be needed — pg driver is strictly simpler.
 
 **Status:** LOCKED. Full analysis: `projects/nexus-v1/AMB-1-SUPABASE-VS-POSTGRES-DECISION.md`
+
+---
+
+### Decision: pnpm Install Method
+
+**Date:** 2026-04-02
+
+**Owner:** Backend (implementation)
+
+**Context:** Day 1 T1 — `corepack enable` requires elevated filesystem permissions (symlink to /usr/local/bin) which are not available inside the Docker container.
+
+**Decision:** Use `npm install -g pnpm` instead of corepack. Functionally equivalent — pnpm 10.33.0 installed and working.
+
+**Trade-offs:** Minor deviation from ideal corepack flow. No impact on project structure or Dockerfile (which already uses `npm install -g pnpm`).
+
+**Reversibility:** Trivial. If corepack becomes available, switch to it.
