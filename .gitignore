@@ -1,0 +1,40 @@
+# Node
+node_modules/
+npm-debug.log*
+bun.lockb
+
+# Python
+__pycache__/
+*.pyc
+
+# Env / secrets
+.env
+.env.*
+*.key
+*.pem
+
+# Logs
+logs/
+*.log
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+
+# Temp / cache
+.tmp/
+.cache/
+
+# Claude / local runtime
+.claude/
+.npm/
+.local/
+.ssh/
+
+# OpenClaw runtime state
+.openclaw/
+
+# Misc local state
+.history
+.profile
