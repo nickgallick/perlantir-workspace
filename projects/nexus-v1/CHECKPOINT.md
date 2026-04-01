@@ -6,10 +6,10 @@
 
 ```
 schema-version      : 1.0.0
-checkpoint-id       : 001
-prior-checkpoint-id : GENESIS
+checkpoint-id       : 002
+prior-checkpoint-id : 001
 last-writer         : Governor
-last-updated        : 2026-04-01 23:10 UTC+8
+last-updated        : 2026-04-01 23:57 UTC+8
 active-owner        : Governor
 lock-status         : UNLOCKED
 ```
@@ -91,16 +91,16 @@ All documented in: `agents/backend/capabilities/NEXUS-KNOWN-SPEC-ISSUES.md`
 
 ---
 
-## Blockers
+## Resolved Blockers
 
-| ID | Description | Owner | Status |
-|----|------------|-------|--------|
-| AMB-1 | Supabase JS client expects HTTP/PostgREST URL; Docker compose provides raw PostgreSQL connection string. All spec database code must be reinterpreted based on resolution | Architect → Operator | **OPEN — blocks implementation** |
+| ID | Description | Resolution | Date |
+|----|------------|-----------|------|
+| AMB-1 | Supabase JS client incompatible with raw PostgreSQL connection | Adopt raw `pg` driver. Drop `@supabase/supabase-js`. ~30 query rewrites, no logic changes | 2026-04-01 23:57 UTC+8 |
 
 ---
 
-## Next Phase Options
+## Next Phase
 
-1. **Resolve AMB-1** → then begin implementation (Phase 2: Week 1 core build)
-2. **Approve Phase 1B** → 9 more capability files (deeper preparation)
-3. **Both** → resolve AMB-1 + Phase 1B in parallel
+**Day 1 Implementation** — monorepo setup, types, roles, DB schema, pg pool, embeddings.
+
+Implementation plan: `projects/nexus-v1/DAY-1-IMPLEMENTATION-PLAN.md`

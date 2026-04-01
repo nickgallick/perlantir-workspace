@@ -29,21 +29,19 @@ Full planning pass: `projects/NEXUS-CAPABILITY-LAYER-PLAN.md`
 
 ## Nexus v1
 
-### Status: BLOCKED on AMB-1
+### Status: READY FOR IMPLEMENTATION
 
-**AMB-1: Supabase Client vs. Raw PostgreSQL**
-
-The spec uses `@supabase/supabase-js` client syntax everywhere but Docker compose connects to raw PostgreSQL. These are incompatible. Every database operation in the spec depends on this resolution.
+**AMB-1: RESOLVED** — Adopt raw `pg` (node-postgres). Drop `@supabase/supabase-js`. Approved 2026-04-01 23:57 UTC+8.
 
 Decision artifact: `projects/nexus-v1/AMB-1-SUPABASE-VS-POSTGRES-DECISION.md`
 
-**Recommendation:** Option 2 (raw `pg` driver + pgvector). See decision artifact for full analysis.
+5 capability files updated to reflect pg driver architecture. Day 1 implementation plan created.
 
-### What's Next (After AMB-1)
+### What's Next
 
-1. Operator resolves AMB-1
+1. Day 1 implementation (monorepo, types, roles, schema, pg pool, embeddings)
 2. Optionally: Phase 1B (9 more capability files) — see CAPABILITY-LAYER-PLAN.md
-3. Implementation Phase 2 (Week 1 core build: Days 1-5)
+3. Continue Week 1 core build: Days 2-5
 
 ### Discovered Issues
 

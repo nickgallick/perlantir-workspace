@@ -6,7 +6,7 @@ Phase 1A: Capability Layer — **COMPLETE**
 
 ## Health
 
-**Yellow** — Blocked on AMB-1 (Supabase client vs. raw PostgreSQL). No implementation until resolved.
+**Green** — AMB-1 resolved. Ready for implementation.
 
 ## Progress
 
@@ -28,21 +28,19 @@ Phase 1A: Capability Layer — **COMPLETE**
 - Spec relocated to `projects/nexus-v1/nexus-v1-spec.txt`
 - MEMORY.md updated with Phase 1A state
 
-## Blockers
+## Resolved Blockers
 
-### AMB-1: Supabase Client vs. Raw PostgreSQL (BLOCKING)
+### AMB-1: Supabase Client vs. Raw PostgreSQL — RESOLVED 2026-04-01
 
-The spec uses `@supabase/supabase-js` client syntax throughout all code (§7, §10, §14), but the Docker compose (§16) connects to raw PostgreSQL, not a Supabase API endpoint. The Supabase JS client requires an HTTP URL to a PostgREST-compatible API, not a PostgreSQL connection string.
-
-**Impact:** Every database operation in the spec must be reinterpreted depending on resolution. Affects: Architect, Backend, DevOps, QA.
+**Decision:** Adopt raw `pg` (node-postgres). Drop `@supabase/supabase-js`. Preserve 2-service Docker compose.
 
 **Decision artifact:** `projects/nexus-v1/AMB-1-SUPABASE-VS-POSTGRES-DECISION.md`
 
 ## Next Steps
 
-1. Resolve AMB-1 (operator decision required)
-2. Upon AMB-1 resolution: optionally approve Phase 1B (9 capability files) or proceed to implementation
-3. Implementation Phase 2 (Week 1 core build) cannot start until AMB-1 is resolved
+1. Day 1 implementation (monorepo setup, types, roles, DB schema, embeddings, pg pool)
+2. Optionally: Phase 1B (9 capability files) in parallel or after implementation starts
+3. Implementation Phase 2 (Week 1 core build: Days 1-5)
 
 ## Notes
 

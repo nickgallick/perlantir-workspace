@@ -33,11 +33,13 @@ Three components, one database, one API layer:
 
 **External dependencies:** OpenAI Embeddings API (text-embedding-3-small, 1536 dims). Optional: Anthropic Claude Sonnet 4.6 (distillery, post-launch only).
 
+**Database access:** Raw `pg` (node-postgres) driver with connection pool (`pg.Pool`). All queries are parameterized SQL. No ORM, no query builder, no Supabase client. (AMB-1 decision: see `projects/nexus-v1/AMB-1-SUPABASE-VS-POSTGRES-DECISION.md`)
+
 ## Package Boundaries (Spec §3)
 
 | Package | Responsibility | Depends On |
 |---------|---------------|-----------|
-| `@nexus-ai/core` | All business logic: decision graph CRUD, context compilation, scoring, packing, formatting, change propagation, freshness, embeddings | PostgreSQL via Supabase client, OpenAI API |
+| `@nexus-ai/core` | All business logic: decision graph CRUD, context compilation, scoring, packing, formatting, change propagation, freshness, embeddings | PostgreSQL via `pg` (node-postgres) Pool, OpenAI API |
 | `@nexus-ai/server` | HTTP API + WebSocket. Thin routing layer that delegates to core | `@nexus-ai/core` |
 | `@nexus-ai/sdk` | Client library for consuming the API. Convenience helpers | None (HTTP client only) |
 

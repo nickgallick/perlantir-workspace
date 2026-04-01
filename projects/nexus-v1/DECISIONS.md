@@ -38,18 +38,31 @@
 
 ---
 
-### Decision: PENDING — Supabase Client vs. Raw PostgreSQL (AMB-1)
+### Decision: APPROVED — Raw pg Driver, Drop Supabase Client (AMB-1)
 
-**Date:** 2026-04-01 (identified)
+**Date:** 2026-04-01 (identified) → 2026-04-01 23:57 UTC+8 (approved)
 
-**Owner:** Pending operator decision
+**Owner:** Operator (Nick)
 
-**Context:** Spec §7, §10, §14 use `@supabase/supabase-js` client syntax. Spec §16 Docker compose connects to raw PostgreSQL. These are incompatible — Supabase JS client needs an HTTP/PostgREST endpoint, not a PostgreSQL connection string.
+**Context:** Spec §7, §10, §14 use `@supabase/supabase-js` client syntax. Spec §16 Docker compose connects to raw PostgreSQL. Supabase JS client requires HTTP/PostgREST endpoint — incompatible with raw PostgreSQL connection string.
 
-**Options:** See `projects/nexus-v1/AMB-1-SUPABASE-VS-POSTGRES-DECISION.md`
+**Options Considered:**
+1. Full Supabase local stack — rejected (8 containers, excessive for a library)
+2. **Raw pg driver (node-postgres)** — adopted
+3. PostgreSQL + standalone PostgREST — rejected (unnecessary HTTP hop, no value)
+4. Supabase cloud — rejected (breaks self-hosted positioning)
 
-**Decision:** PENDING — blocks implementation
+**Decision:** Adopt raw `pg` (node-postgres). Remove `@supabase/supabase-js` assumption entirely. Preserve PostgreSQL 16 + pgvector as data layer. Preserve 2-service Docker compose topology. All ~30 Supabase query calls rewritten as parameterized SQL.
 
-**Trade-offs:** TBD
+**Trade-offs:** ~30 mechanical query rewrites during implementation. No business logic changes. Gains: simplest possible data layer, no intermediary, transparent SQL, ecosystem standard driver.
 
-**Reversibility:** TBD
+**Downstream consequences:**
+- `NexusConfig`: `supabaseUrl`/`supabaseKey` → `databaseUrl`
+- New dependency: `pg` + `@types/pg` (replaces `@supabase/supabase-js`)
+- Docker compose: `SUPABASE_URL` → `DATABASE_URL`, remove `SUPABASE_SERVICE_KEY`
+- Core classes (`ContextCompiler`, `ChangePropagator`): constructor takes `pg.Pool` instead of `SupabaseClient`
+- New file: `packages/core/src/db/client.ts` — pool creation and query helpers
+
+**Reversibility:** Medium. Switching back to Supabase client would require rewriting all queries again. Unlikely to be needed — pg driver is strictly simpler.
+
+**Status:** LOCKED. Full analysis: `projects/nexus-v1/AMB-1-SUPABASE-VS-POSTGRES-DECISION.md`
