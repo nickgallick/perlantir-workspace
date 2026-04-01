@@ -9,9 +9,22 @@ After any meaningful completed task, update project state files before reporting
 **Minor task** → `STATUS.md` only.
 **Material state change** (phase completion, blocker resolution, approval, architecture change, decision) → full pass: `STATUS.md`, `CHECKPOINT.md`, `DECISIONS.md` (if decision changed), `SESSION-HANDOFF`, `MEMORY.md` (if durable memory changed).
 
-Every completion report ends with a **State Preservation** section listing files updated, why, and confirming handoff/memory currency.
-
 Do not rewrite files unnecessarily. Do not perform shallow/generic updates. Each update must capture: what completed, what changed, what is now true, what remains blocked/unblocked, exact next step, downstream agent impact.
+
+### Mandatory State Preservation Reporting (Effective 2026-04-02 03:33 UTC+8)
+
+Every completion report must include a dedicated section with explicit status for every state file:
+
+```
+## State Preservation
+- projects/nexus-v1/STATUS.md — updated / no update needed (reason)
+- projects/nexus-v1/CHECKPOINT.md — updated / no update needed (reason)
+- projects/nexus-v1/DECISIONS.md — updated / no update needed (reason)
+- memory/SESSION-HANDOFF-YYYY-MM-DD.md — updated / no update needed (reason)
+- MEMORY.md — updated / no update needed (reason)
+```
+
+If a file was not updated, state why. State preservation is not complete until it is both performed and explicitly reported. No inference required by the operator.
 
 ---
 
