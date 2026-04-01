@@ -28,6 +28,10 @@ importers:
         version: 3.2.4(@types/node@22.19.15)
 
   packages/sdk:
+    dependencies:
+      '@nexus-ai/core':
+        specifier: workspace:*
+        version: link:../core
     devDependencies:
       '@types/node':
         specifier: ^22.0.0
