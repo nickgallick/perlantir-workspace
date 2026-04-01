@@ -24,7 +24,7 @@ Three components, one database, one API layer:
 │  ContextCompiler │ ChangePropagator │ DecisionGraph  │
 │  TokenPacker │ Formatter │ Distillery │ Temporal     │
 └──────────────────────┬──────────────────────────────┘
-                       │ Supabase client
+                       │ pg.Pool (node-postgres)
 ┌──────────────────────▼──────────────────────────────┐
 │           PostgreSQL 16 + pgvector                    │
 │  9 tables │ 2 functions │ 3 triggers │ IVFFlat index │

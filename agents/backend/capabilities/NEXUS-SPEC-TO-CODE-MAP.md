@@ -13,13 +13,14 @@ Implementation follows the spec's 15-day order (§19). Each day's deliverables d
 | Spec § | Output File | What to Do |
 |--------|-----------|-----------|
 | §3 | Monorepo root: `package.json`, `pnpm-workspace.yaml`, `turbo.json`, `.gitignore`, `.env.example` | Scaffold monorepo. Enable corepack + pnpm first |
-| §5 | `packages/core/src/types.ts` | Copy type definitions. Fix any truncated lines (see KNOWN-SPEC-ISSUES) |
+| §5 | `packages/core/src/types.ts` | Copy type definitions. Fix truncated lines (see KNOWN-SPEC-ISSUES). Change `NexusConfig`: `supabaseUrl`/`supabaseKey` → `databaseUrl` |
 | §6 | `packages/core/src/roles.ts` | Copy role templates. Fix truncated weight map lines |
 | §4 | `supabase/migrations/001_initial_schema.sql` | Copy schema. Verify all 9 tables + 2 functions + 3 triggers |
 | §13 | `packages/core/src/context-compiler/relevance.ts` | `createOpenAIEmbedder()` + `cosineSimilarity()` |
-| — | `packages/core/package.json`, `tsconfig.json`, `vitest.config.ts` | Package setup for @nexus-ai/core |
+| — | `packages/core/src/db/client.ts` | **New (AMB-1).** Create `pg.Pool` wrapper: pool creation from `DATABASE_URL`, typed query helpers, connection health check |
+| — | `packages/core/package.json`, `tsconfig.json`, `vitest.config.ts` | Package setup for @nexus-ai/core. Dependencies: `pg`, `@types/pg` (not `@supabase/supabase-js`) |
 
-**Verify:** monorepo builds (`pnpm install && pnpm turbo build`), types compile, DB schema applies cleanly
+**Verify:** monorepo builds (`pnpm install && pnpm turbo build`), types compile, DB schema applies cleanly, pool connects to Postgres
 
 ### Day 2: Decision Graph (Spec §4 tables + §7 graph parts)
 

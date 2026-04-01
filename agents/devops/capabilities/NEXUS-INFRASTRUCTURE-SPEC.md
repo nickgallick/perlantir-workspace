@@ -14,8 +14,7 @@ services:
     build: .
     ports: ["${PORT:-3000}:${PORT:-3000}"]
     environment:
-      - SUPABASE_URL=postgresql://nexus:${POSTGRES_PASSWORD:-nexus_dev}@postgres:5432/nexus
-      - SUPABASE_SERVICE_KEY=${SUPABASE_SERVICE_KEY:-local}
+      - DATABASE_URL=postgresql://nexus:${POSTGRES_PASSWORD:-nexus_dev}@postgres:5432/nexus
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
       - PORT=${PORT:-3000}
@@ -79,10 +78,9 @@ CMD ["node", "packages/server/dist/index.js"]
 | Variable | Required | Default | Purpose |
 |----------|---------|---------|---------|
 | `OPENAI_API_KEY` | **Yes** | — | Embeddings API (every decision/artifact creation) |
-| `POSTGRES_PASSWORD` | No | `nexus_dev` | Database password |
+| `DATABASE_URL` | Auto | Derived from compose (`postgresql://nexus:...@postgres:5432/nexus`) | PostgreSQL connection string for `pg.Pool` |
+| `POSTGRES_PASSWORD` | No | `nexus_dev` | Database password (used in compose + DATABASE_URL) |
 | `PORT` | No | `3000` | Server port |
-| `SUPABASE_URL` | Auto | Derived from compose | Database connection |
-| `SUPABASE_SERVICE_KEY` | Auto | `local` | Supabase client auth (see AMB-1 in KNOWN-SPEC-ISSUES) |
 | `ANTHROPIC_API_KEY` | No | — | Distillery only (post-launch, opt-in) |
 | `NEXUS_API_KEY` | No | — | API authentication |
 

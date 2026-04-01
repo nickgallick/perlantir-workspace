@@ -118,16 +118,15 @@ return estimateTokens([s.topic, s.summary, s.assumptions.join(' '), s.open_quest
 
 ## Ambiguities
 
-### AMB-1: Supabase Client vs. Direct pg
+### AMB-1: Supabase Client vs. Direct pg — RESOLVED
 
-The spec uses `@supabase/supabase-js` client syntax (`.from().select().eq()`) throughout, but the Docker compose connects to raw PostgreSQL, not Supabase cloud. The Supabase JS client can connect to any PostgreSQL via `createClient(url, key)`, but the `SUPABASE_URL` env var in docker-compose is set to a raw postgres connection string, while Supabase client expects an HTTP URL to a Supabase API.
+**Decision (LOCKED):** Adopt raw `pg` (node-postgres). Drop `@supabase/supabase-js`.
 
-**Resolution needed:** Either:
-1. Use Supabase local (supabase/supabase image) — heavier, more accurate to spec
-2. Use raw `pg` driver — lighter, but every spec query pattern must be rewritten
-3. Use PostgREST standalone — gives Supabase-like HTTP API without full Supabase
+All spec query patterns using `.from().select().eq()` must be rewritten as parameterized SQL via `pg.Pool`. `.rpc()` calls become direct `pool.query('SELECT * FROM function_name($1, $2)', [args])`. `.upsert()` becomes `INSERT ... ON CONFLICT ... DO UPDATE`.
 
-**Recommendation:** This is an OPEN architectural decision. Escalate to Architect.
+This affects ~30 query calls across compiler.ts, propagator.ts, and app.ts. The business logic is unchanged — only the database access layer changes.
+
+See: `projects/nexus-v1/AMB-1-SUPABASE-VS-POSTGRES-DECISION.md`
 
 ### AMB-2: Session Summaries API Routes
 

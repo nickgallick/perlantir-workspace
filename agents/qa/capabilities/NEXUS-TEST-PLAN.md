@@ -8,8 +8,9 @@ What must be proven before Nexus v1 can ship. Derived from Spec §20, §21.
 
 - **Framework:** Vitest (Spec §2)
 - **Database:** Real PostgreSQL 16 with pgvector. NOT SQLite. NOT mocked. Vector queries and recursive CTEs must execute against real Postgres
+- **Database driver:** `pg.Pool` (node-postgres). No Supabase client. Test setup creates a pool pointing to test database, applies migrations, then runs tests. (AMB-1 resolved)
 - **Embeddings:** Stub embedder for unit tests (returns deterministic vectors). Real OpenAI embeddings for integration/scenario tests (sparingly — API costs + rate limits)
-- **Test DB setup:** Each test suite creates its own project to avoid cross-test contamination. Teardown deletes test data
+- **Test DB setup:** Each test suite creates its own project to avoid cross-test contamination. Teardown deletes test data. Pool created in `beforeAll`, released in `afterAll`
 
 ## Unit Tests (4 files, Spec §20)
 
