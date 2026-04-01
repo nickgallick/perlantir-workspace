@@ -115,8 +115,40 @@ These are cleanliness fixes. The system is operationally sound without them.
 
 ---
 
+## Nexus Capability Layer — Phase 1A Complete (2026-04-01)
+
+**15 files built.** Approved and executed in single phase.
+
+### Shared (4 files) — `projects/nexus-v1/shared/`
+- NEXUS-ARCHITECTURE-GLOSSARY.md — canonical terms
+- NEXUS-SPEC-INDEX.md — concept → spec section quick-reference
+- NEXUS-IMPLEMENTATION-CONSTRAINTS.md — runtime + locked stack decisions
+- NEXUS-SUCCESS-RUBRIC.md — 5 launch success criteria
+
+### Agent Capabilities (11 files) — `agents/<agent>/capabilities/`
+- Architect: NEXUS-ARCHITECTURE-BRIEF.md, NEXUS-LOCKED-DECISIONS.md
+- Backend: NEXUS-SPEC-TO-CODE-MAP.md, NEXUS-KNOWN-SPEC-ISSUES.md, NEXUS-ALGORITHM-REFERENCE.md
+- Product: NEXUS-SCOPE-BOUNDARY.md
+- DevOps: NEXUS-INFRASTRUCTURE-SPEC.md
+- Security: NEXUS-THREAT-MODEL.md
+- QA: NEXUS-TEST-PLAN.md, NEXUS-SCENARIO-DEFINITIONS.md
+- Docs: NEXUS-KEY-MESSAGING.md
+
+### Spec relocated to `projects/nexus-v1/nexus-v1-spec.txt`
+
+### Full planning pass at `projects/NEXUS-CAPABILITY-LAYER-PLAN.md`
+Contains Phase 1B (9 files) and 1C (deferred) scope.
+
+### Key Spec Issues Discovered
+- AMB-1: Supabase client vs raw pg — spec uses Supabase JS syntax but Docker connects to raw Postgres. OPEN architectural decision
+- 5 confirmed code bugs documented in KNOWN-SPEC-ISSUES.md (missing comma, truncated lines)
+- 5 ambiguities documented (session routes missing, API key auth not implemented, WS handler not specified, PackResult import unclear)
+
 ## Recommended Next Step
 
-Plan a Nexus-specific capability layer: identify what decision frameworks, templates, and rubrics the core build agents (Architect, Product, Backend, DevOps, Frontend) actually need for Nexus, then build only those before execution begins. No generic files. No premature abstraction.
+Either:
+1. Approve Phase 1B (9 more capability files) — deeper preparation
+2. Approve project instantiation (BRIEF, PLAN, CHECKPOINT, STATUS, DECISIONS from .template/) — begin Nexus execution setup
+3. Begin Nexus implementation directly — Phase 1A provides enough foundation
 
 Nick decides scope. No phase starts without approval.
