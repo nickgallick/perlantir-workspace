@@ -168,10 +168,30 @@ Completion standard tightened: detect → resolve/classify → re-run verificati
 - Tests: 24 new (13 change-propagator + 11 scenario), 150 total, all pass
 - No deviations
 
-### Day 6 Target: Seed Data + Demo Script
+### Day 6: SDK Client + Seed Data + Demo Script — COMPLETE (2026-04-02 05:47 UTC+8)
 
-1. `seedSoftwareTeamDemo()` in SDK (spec §15)
-2. Comparison demo script (spec §17)
+- `NexusClient` class: full CRUD, convenience helpers (createRoleAgent, compileForAgent, recordDecisionWithEdges)
+- `seedSoftwareTeamDemo()`: 6 agents, 10 decisions, 4 edges (spec §15)
+- Comparison demo script: baseline vs Nexus + change propagation (spec §17)
+- SDK re-exports all core types; consumers don't need @nexus-ai/core directly
+- Tests: 9 new (8 client + 1 placeholder), 159 total, all pass
+- Demo requires server (Day 8) to run end-to-end
+
+### Day 6b: API Server (Hono) — COMPLETE (2026-04-02 05:53 UTC+8)
+
+- Hono REST API: all core routes (projects, agents, decisions, edges, artifacts, compile, notifications, health)
+- Middleware: auth (env-based API key), validation (required fields, UUID), error handling (AppError + onError)
+- Consistent error envelope: `{ error: { code, message, details? } }`
+- Health endpoint with DB dependency state
+- E2E tests through HTTP boundary including role-differentiation proof
+- Tests: 27 new (26 routes + 1 placeholder), 186 total, all pass
+- Build recoveries: pg deps missing (resolved), Hono error handler pattern (resolved)
+- Stubbed: per-project API keys, rate limiting per key, WS endpoint
+
+### Day 7 Target: Demo Polish + Artifact CRUD Integration
+
+1. Artifact CRUD integration (spec §7 artifacts)
+2. Demo polish
 
 ---
 

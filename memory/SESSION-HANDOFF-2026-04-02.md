@@ -2,19 +2,21 @@
 
 ## Current State
 
-**Day 5 Implementation: COMPLETE.** Change Propagator + Scenario Test built and proven. Days 1–4 locked. Ready for Day 6.
+**Day 6 (both parts): COMPLETE.** SDK client + seed data + demo script + full API server built and tested. Days 1–5 locked. Ready for Day 7.
 
 ## What Was Built Today
 
 | Day | Scope | Tests | Status |
 |-----|-------|-------|--------|
-| 2 | Decision Graph (migration runner, CRUD, traversal) | 30 | LOCKED |
-| 3 | Scoring Layer (5 signals, role-differentiated) | 43 | LOCKED |
-| 4 | Assembly (compile pipeline, packer, formatter, graph expansion) | 25 | LOCKED |
-| 4+ | Proof Lock (role-differentiation regression) | 11 | LOCKED |
-| 5 | Critical Test + Change Propagator | 24 | COMPLETE |
+| 2 | Decision Graph | 30 | LOCKED |
+| 3 | Scoring Layer | 43 | LOCKED |
+| 4 | Assembly (compile pipeline, packer, formatter) | 25 | LOCKED |
+| 4+ | Proof Lock | 11 | LOCKED |
+| 5 | Critical Test + Change Propagator | 24 | LOCKED |
+| 6a | SDK Client + Seed + Demo Script | 9 | LOCKED |
+| 6b | API Server (Hono) + E2E Tests | 27 | COMPLETE |
 
-**Total**: 150/150 tests pass (8 test files), 3/3 packages build clean.
+**Total**: 186/186 tests pass (12 test files), 3/3 packages build clean.
 
 ## Key Decisions (All Locked)
 
@@ -23,40 +25,29 @@
 - **Start PG**: `sudo -n pg_ctlcluster 17 main start`
 - **DATABASE_URL**: `postgresql://nexus:nexus_dev@localhost:5432/nexus`
 
-## Operator Corrections Applied
-
-1. **Completion standard** (2026-04-02 03:45 UTC+8): detect → resolve/classify → re-verify → declare. No phase marked complete with unresolved signals.
-2. **State preservation reporting** (2026-04-02 03:33 UTC+8): Every completion report must list all state files with explicit updated/no-update-needed + reason.
-
 ## Repo State
 
 ```
-nexus/packages/core/src/
-├── types.ts, roles.ts, nexus.ts (stub)
-├── db/         — client.ts, migrator.ts, index.ts
-├── decision-graph/ — graph.ts, queries.ts, traversal.ts, index.ts
-├── context-compiler/ — relevance.ts, scoring.ts, compiler.ts, packer.ts, formatter.ts, index.ts
-├── change-propagator/ — propagator.ts, subscriptions.ts, index.ts
-├── distillery/ — index.ts (stub)
-├── temporal/   — index.ts (stub)
+nexus/packages/core/src/       — types, roles, db, decision-graph, context-compiler, change-propagator
+nexus/packages/sdk/src/        — NexusClient + type re-exports
+nexus/packages/server/src/     — Hono app + middleware (errors, auth, validate)
+nexus/examples/software-team/  — comparison.ts demo
 ```
 
-## Next: Day 6 — Seed Data + Demo Script
-
-1. `seedSoftwareTeamDemo()` in SDK (spec §15)
-2. Comparison demo script (spec §17)
+## Next: Day 7 — Demo Polish + Artifact CRUD Integration
 
 Requires explicit approval.
 
 ## Proof Lock
 
-Core product claim permanently protected:
-- `projects/nexus-v1/ROLE-DIFFERENTIATION-PROOF.md` — exact fixtures, outputs, analysis
-- `packages/core/tests/role-differentiation.test.ts` — 11 regression assertions
-- `packages/core/tests/scenario.test.ts` — 11 scenario assertions (5 scenarios from spec §20)
+- `ROLE-DIFFERENTIATION-PROOF.md` + `role-differentiation.test.ts` (11)
+- `scenario.test.ts` (11)
+- `routes.test.ts` includes E2E role-differentiation through API boundary
 
-## Known Issues
+## Stubbed / Remaining
 
-- 5 spec bugs documented in `agents/backend/capabilities/NEXUS-KNOWN-SPEC-ISSUES.md` (all addressed during implementation)
-- AMB-2 through AMB-5 remain open (non-blocking for Days 1–6)
-- No `context_cache` table exists yet — cache invalidation in propagator is deferred
+- Per-project API key isolation (api_keys table)
+- Key rotation, expiry, rate limiting per key, scoped permissions
+- WS endpoint for real-time push
+- No `context_cache` table
+- AMB-2 through AMB-5 open (non-blocking)
