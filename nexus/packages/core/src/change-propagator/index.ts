@@ -1,2 +1,10 @@
-// Change propagator module — Day 5 implementation
-export {};
+export { ChangePropagator } from './propagator.js';
+
+export {
+  createSubscription,
+  listSubscriptions,
+  findMatchingSubscriptions,
+  deleteSubscription,
+  deleteAgentSubscriptions,
+} from './subscriptions.js';
+export type { CreateSubscriptionInput } from './subscriptions.js';

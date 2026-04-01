@@ -57,6 +57,17 @@ export type { CompileOptions, CompileDebugTrace } from './context-compiler/index
 export { packIntoBudget, estimateTokens } from './context-compiler/index.js';
 export { formatAsMarkdown, formatAsJson } from './context-compiler/index.js';
 
+// Change Propagator
+export { ChangePropagator } from './change-propagator/index.js';
+export {
+  createSubscription,
+  listSubscriptions,
+  findMatchingSubscriptions,
+  deleteSubscription,
+  deleteAgentSubscriptions,
+} from './change-propagator/index.js';
+export type { CreateSubscriptionInput } from './change-propagator/index.js';
+
 // Decision Graph — CRUD + traversal
 export {
   createDecision,

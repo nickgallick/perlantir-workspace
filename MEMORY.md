@@ -158,12 +158,20 @@ Phase 1B (9 files) scoped but not started. See `projects/NEXUS-CAPABILITY-LAYER-
 ### Operator Correction (2026-04-02 03:45 UTC+8)
 Completion standard tightened: detect → resolve/classify → re-run verification → declare with clean state. No phase marked complete with unresolved signals. Enforced going forward.
 
-### Day 5 Target: Critical Test + Change Propagator
+### Day 5: Critical Test + Change Propagator — COMPLETE (2026-04-02 05:13 UTC+8)
 
-1. THE scenario test: 3 agents, 10 decisions → compile each → verify different context
-2. `ChangePropagator` class from §10
-3. Subscription management
-4. Role-differentiated notifications
+- `ChangePropagator` class: onDecisionCreated, onDecisionSuperseded, onDecisionReverted
+- Role-appropriate notifications: 9-role context map, urgency levels (high for supersede/revert)
+- WebSocket client registry for real-time push
+- Subscription CRUD: create (upsert), list, findMatching, delete, deleteAll
+- THE Scenario Test: 5 scenarios (A-E) from spec §20, 10 decisions, 4 edges, 3 agents
+- Tests: 24 new (13 change-propagator + 11 scenario), 150 total, all pass
+- No deviations
+
+### Day 6 Target: Seed Data + Demo Script
+
+1. `seedSoftwareTeamDemo()` in SDK (spec §15)
+2. Comparison demo script (spec §17)
 
 ---
 
