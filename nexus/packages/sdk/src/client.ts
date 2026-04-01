@@ -1,6 +1,8 @@
 // ============================================================
 // NEXUS v1 — TypeScript SDK Client
 // Spec §15: Full client with CRUD + convenience helpers
+// Day 7: Complete server surface coverage, typed errors,
+//         edge/artifact/health methods
 // ============================================================
 
 import type {
@@ -10,14 +12,60 @@ import type {
   CreateAgentInput,
   Decision,
   CreateDecisionInput,
+  DecisionEdge,
+  CreateEdgeInput,
   Artifact,
   CreateArtifactInput,
   Notification,
   CompileRequest,
   ContextPackage,
   RelevanceProfile,
+  ConnectedDecision,
 } from '@nexus-ai/core';
 import { getRoleTemplate } from '@nexus-ai/core';
+
+// ---- Error Types ----
+
+/** Server error envelope shape: { error: { code, message, details? } } */
+export interface NexusErrorEnvelope {
+  error: {
+    code: string;
+    message: string;
+    details?: unknown;
+  };
+}
+
+/**
+ * Typed error preserving the server's error envelope.
+ * Consumers can inspect `.code`, `.serverMessage`, `.details`, and `.status`.
+ */
+export class NexusApiError extends Error {
+  public readonly status: number;
+  public readonly code: string;
+  public readonly serverMessage: string;
+  public readonly details?: unknown;
+
+  constructor(status: number, envelope: NexusErrorEnvelope) {
+    const msg = `Nexus API error (${status}/${envelope.error.code}): ${envelope.error.message}`;
+    super(msg);
+    this.name = 'NexusApiError';
+    this.status = status;
+    this.code = envelope.error.code;
+    this.serverMessage = envelope.error.message;
+    this.details = envelope.error.details;
+  }
+}
+
+// ---- Health Types ----
+
+export interface HealthResponse {
+  status: 'ok' | 'degraded';
+  version: string;
+  dependencies: { database: string };
+  timestamp: string;
+}
+
+// ---- Client ----
 
 export interface NexusClientConfig {
   url: string;
@@ -44,7 +92,18 @@ export class NexusClient {
     });
 
     if (!res.ok) {
-      throw new Error(`Nexus API error (${res.status}): ${await res.text()}`);
+      let envelope: NexusErrorEnvelope;
+      try {
+        const json = await res.json();
+        if (json && typeof json === 'object' && 'error' in json) {
+          envelope = json as NexusErrorEnvelope;
+        } else {
+          envelope = { error: { code: 'UNKNOWN', message: JSON.stringify(json) } };
+        }
+      } catch {
+        envelope = { error: { code: 'UNKNOWN', message: await res.text().catch(() => 'Unknown error') } };
+      }
+      throw new NexusApiError(res.status, envelope);
     }
 
     return res.json() as Promise<T>;
@@ -85,9 +144,39 @@ export class NexusClient {
     return this.request('POST', `/api/projects/${input.project_id}/decisions`, input);
   }
 
+  async updateDecisionStatus(
+    id: string,
+    status: 'active' | 'superseded' | 'reverted' | 'pending',
+    opts?: { supersedes_id?: string; reverted_by?: string },
+  ): Promise<Decision> {
+    return this.request('PATCH', `/api/decisions/${id}`, { status, ...opts });
+  }
+
+  // ---- Edges ----
+
+  async createEdge(sourceDecisionId: string, input: Omit<CreateEdgeInput, 'source_id'>): Promise<DecisionEdge> {
+    return this.request('POST', `/api/decisions/${sourceDecisionId}/edges`, input);
+  }
+
+  async listEdges(decisionId: string): Promise<DecisionEdge[]> {
+    return this.request('GET', `/api/decisions/${decisionId}/edges`);
+  }
+
+  async deleteEdge(edgeId: string): Promise<{ ok: boolean }> {
+    return this.request('DELETE', `/api/edges/${edgeId}`);
+  }
+
+  // ---- Artifacts ----
+
   async registerArtifact(input: CreateArtifactInput): Promise<Artifact> {
     return this.request('POST', `/api/projects/${input.project_id}/artifacts`, input);
   }
+
+  async listArtifacts(projectId: string): Promise<Artifact[]> {
+    return this.request('GET', `/api/projects/${projectId}/artifacts`);
+  }
+
+  // ---- Notifications ----
 
   async getNotifications(agentId: string, unreadOnly?: boolean): Promise<Notification[]> {
     return this.request('GET', `/api/agents/${agentId}/notifications${unreadOnly ? '?unread=true' : ''}`);
@@ -101,8 +190,14 @@ export class NexusClient {
     return this.request('POST', '/api/compile', request);
   }
 
-  async getDecisionGraph(id: string, depth?: number): Promise<unknown[]> {
+  async getDecisionGraph(id: string, depth?: number): Promise<ConnectedDecision[]> {
     return this.request('GET', `/api/decisions/${id}/graph${depth ? '?depth=' + depth : ''}`);
+  }
+
+  // ---- Health ----
+
+  async health(): Promise<HealthResponse> {
+    return this.request('GET', '/api/health');
   }
 
   // ---- Convenience Helpers ----

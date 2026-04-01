@@ -13,7 +13,10 @@
     "@nexus-ai/core": "workspace:*"
   },
   "devDependencies": {
+    "@nexus-ai/server": "workspace:*",
     "@types/node": "^22.0.0",
+    "pg": "^8.13.0",
+    "@types/pg": "^8.11.0",
     "typescript": "^5.7.0",
     "vitest": "^3.0.0"
   },

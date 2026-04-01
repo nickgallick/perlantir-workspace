@@ -2,8 +2,8 @@
 // @nexus-ai/sdk — Public API
 // ============================================================
 
-export { NexusClient } from './client.js';
-export type { NexusClientConfig } from './client.js';
+export { NexusClient, NexusApiError } from './client.js';
+export type { NexusClientConfig, NexusErrorEnvelope, HealthResponse } from './client.js';
 
 // Re-export core types for SDK consumers
 export type {

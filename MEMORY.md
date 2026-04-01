@@ -188,10 +188,16 @@ Completion standard tightened: detect → resolve/classify → re-run verificati
 - Build recoveries: pg deps missing (resolved), Hono error handler pattern (resolved)
 - Stubbed: per-project API keys, rate limiting per key, WS endpoint
 
-### Day 7 Target: Demo Polish + Artifact CRUD Integration
+### Day 7: SDK Ergonomics + E2E + Demo Polish — COMPLETE (2026-04-02 06:10 UTC+8)
 
-1. Artifact CRUD integration (spec §7 artifacts)
-2. Demo polish
+- SDK error handling: NexusApiError class preserving server error envelope (status, code, serverMessage, details)
+- Missing SDK methods: updateDecisionStatus, createEdge, listEdges, deleteEdge, listArtifacts, health()
+- Type improvements: ConnectedDecision return type, HealthResponse, NexusErrorEnvelope
+- SDK now covers 100% of server routes
+- E2E tests: 27 new through real Hono app + real DB (fetch interception, not mocked)
+- Demo script rewritten: 4-section (baseline vs Nexus vs change propagation vs SDK ergonomics)
+- Tests: 27 new SDK E2E, 213 total, all pass
+- No deviations
 
 ---
 

@@ -6,10 +6,10 @@
 
 ```
 schema-version      : 1.0.0
-checkpoint-id       : 008
-prior-checkpoint-id : 007
+checkpoint-id       : 009
+prior-checkpoint-id : 008
 last-writer         : Governor
-last-updated        : 2026-04-02 05:53 UTC+8
+last-updated        : 2026-04-02 06:10 UTC+8
 active-owner        : Governor
 lock-status         : UNLOCKED
 ```
@@ -20,11 +20,11 @@ lock-status         : UNLOCKED
 
 ```
 project             : Nexus v1
-phase               : Day 6 — API Server (operator-scoped)
+phase               : Day 7 — SDK Ergonomics + Demo + Developer Path
 approval-category   : 2
-approval-phrase     : "Proceed to Day 6" (operator scoped as API server)
-approval-timestamp  : 2026-04-02 05:44 UTC+8
-approved-scope      : Hono API server, all core routes, request validation, error envelope, auth middleware, E2E tests through HTTP boundary
+approval-phrase     : "Proceed to Day 7" (operator directive)
+approval-timestamp  : 2026-04-02 06:03 UTC+8
+approved-scope      : SDK methods for full server surface, typed errors, E2E tests through SDK, demo polish, developer-path proof
 approval-freshness  : FRESH
 lifecycle           : COMPLETED
 status              : PHASE-COMPLETE
@@ -36,44 +36,37 @@ recovery-mode       : NORMAL
 
 ## Deliverables
 
-### Day 6b Output — API Server (7 new files, 2 updated)
+### Day 7 Output — 3 files modified, 1 file created, 1 file rewritten
 
-**Server App:**
-- [x] `packages/server/src/app.ts` — Hono app with all routes (createApp factory)
-- [x] `packages/server/src/index.ts` — Entry point with exports
+**SDK Client Enhancements:**
+- [x] `packages/sdk/src/client.ts` — Added NexusApiError, NexusErrorEnvelope, HealthResponse types; added updateDecisionStatus, createEdge, listEdges, deleteEdge, listArtifacts, health methods; fixed getDecisionGraph return type to ConnectedDecision[]; error handling now preserves server error envelope
+- [x] `packages/sdk/src/index.ts` — Added NexusApiError, NexusErrorEnvelope, HealthResponse exports
 
-**Middleware:**
-- [x] `packages/server/src/middleware/errors.ts` — AppError class, onError handler, 404 handler
-- [x] `packages/server/src/middleware/auth.ts` — API key auth (env-based, dev mode bypass)
-- [x] `packages/server/src/middleware/validate.ts` — requireFields, requireUUID
+**SDK E2E Tests:**
+- [x] `packages/sdk/tests/e2e.test.ts` — 27 new tests through Hono app boundary (health, error handling ×3, project CRUD, agent CRUD, decision CRUD ×5, edge CRUD ×4, artifact CRUD ×2, graph, compile ×3, role differentiation ×2, notifications ×2, full lifecycle)
 
 **Config:**
-- [x] `packages/server/vitest.config.ts` — Test configuration
-- [x] `packages/server/package.json` — Added pg, @types/pg dependencies
+- [x] `packages/sdk/package.json` — Added @nexus-ai/server, pg, @types/pg dev dependencies
+- [x] `packages/sdk/vitest.config.ts` — Added fileParallelism: false, testTimeout: 30000
 
-**Tests:**
-- [x] `packages/server/tests/routes.test.ts` — 26 tests (health, error envelope, CRUD, compile, E2E)
-
-### Build Recovery
-
-1. **TS2307 pg module not found** — server package missing `pg` + `@types/pg` dependencies. Detected → added to package.json → pnpm install → rebuild → clean. Resolved before tests.
-2. **Hono error handler pattern** — initial `errorHandler` as middleware returned text instead of JSON for thrown errors. Hono's `app.onError()` pattern is the correct approach. Detected (5 test failures) → refactored to `registerErrorHandler(app)` using `app.onError()` → all 27 tests pass. Resolved before completion.
+**Demo:**
+- [x] `examples/software-team/comparison.ts` — Rewritten: 4-section structure (baseline/nexus/propagation/ergonomics), health check, artifact demo, edge/graph showcase, typed error handling demo
 
 ### Verification
 
 - Build: 3/3 packages, zero TypeScript errors
-- Tests: 186/186 pass (150 core + 9 SDK + 27 server, 12 test files)
+- Tests: 213/213 pass (150 core + 36 SDK + 27 server, 13 test files)
 - No regressions in any prior test file
+- SDK E2E tests route through real Hono app + real PostgreSQL — not mocked
 
 ---
 
 ## Deviations
 
-1. **Error handler pattern**: Used Hono's `app.onError()` instead of middleware-based error catching. Hono's `use()` middleware doesn't properly intercept thrown errors for JSON responses — `onError()` is the documented pattern. Functionally equivalent, API behavior unchanged.
+None. All deliverables match scope.
 
 ---
 
 ## Next Phase
 
-Day 7: Demo polish + artifact CRUD integration.
-Requires explicit approval.
+Day 8+: Scope TBD. Requires explicit approval.
