@@ -2,48 +2,53 @@
 
 ## Current Phase
 
-Day 1 Implementation — **COMPLETE**
+Day 2 Implementation — **COMPLETE**
 
 ## Health
 
-**Green** — Monorepo builds, all tests pass, ready for Day 2.
+**Green** — Monorepo builds (3/3), all tests pass (47/47), schema applied to live PostgreSQL.
 
 ## Progress
 
 - Capability layer: 100% (15/15 files)
 - Day 1 implementation: 100% (13/13 tasks)
-- Implementation: Day 1 of 15 complete
+- Day 2 implementation: 100% (5/5 deliverables)
+- Implementation: Days 1-2 of 15 complete
 
 ## Last Updated
 
-2026-04-02 01:39 UTC+8
+2026-04-02 02:22 UTC+8
 
 ## Recent Activity
 
-- Day 1 implementation executed: monorepo scaffolded, all 3 packages build, types/roles/db/embeddings implemented
-- 19 tests pass across 3 packages (17 core + 2 placeholders)
-- pnpm installed globally (corepack needed elevated permissions — documented deviation)
-- TypeScript strict mode compatibility fix in roles.ts (Partial override handling)
-- Database schema ready at `supabase/migrations/001_initial_schema.sql`
-- pg.Pool wrapper implemented at `packages/core/src/db/client.ts`
+- Migration runner implemented (Node.js-based, no psql dependency)
+- Decision CRUD: create (with optional embedding), read, list (with filters), update status
+- Edge CRUD: create, list by source/target/decision, delete, list by relationship
+- Graph traversal: `getConnectedDecisions` (recursive via SQL function), `getProjectGraph`
+- Fixed schema `get_connected_decisions` for PostgreSQL 17 compatibility (LATERAL JOIN pattern)
+- PostgreSQL 17 + pgvector 0.8.0 installed and running inside container (dev environment)
+- 30 new tests (3 migrator + 27 decision-graph integration)
+- All 47 tests pass, 3 packages build clean
 
 ## Resolved Blockers
 
 ### AMB-1: Supabase Client vs. Raw PostgreSQL — RESOLVED 2026-04-01
+**Decision:** Adopt raw `pg` (node-postgres). Drop `@supabase/supabase-js`.
 
-**Decision:** Adopt raw `pg` (node-postgres). Drop `@supabase/supabase-js`. Preserve 2-service Docker compose.
-
-**Decision artifact:** `projects/nexus-v1/AMB-1-SUPABASE-VS-POSTGRES-DECISION.md`
+### PostgreSQL 17 Compatibility — RESOLVED 2026-04-02
+**Issue:** Schema's `get_connected_decisions` function used double `UNION ALL` with recursive reference, rejected by PG17.
+**Fix:** Refactored to single recursive term with `JOIN LATERAL` combining both edge directions.
 
 ## Next Steps
 
-1. Day 2: Decision Graph — CRUD + edges + graph traversal + tests
-2. Optionally: Phase 1B (9 capability files) in parallel
-3. Continue Week 1 core build: Days 3-5
+1. Day 3: Context Compiler — Scoring (`scoreDecisions`, freshness, role relevance)
+2. Day 4: Context Compiler — Assembly (expand, pack, format)
+3. Day 5: Critical Test + Change Propagator
 
 ## Notes
 
-- Phase 1B scope defined in `projects/NEXUS-CAPABILITY-LAYER-PLAN.md` (9 files)
-- 4 remaining ambiguities (AMB-2 through AMB-5) are non-blocking; resolvable during implementation
-- Spec's 15-day build order remains the implementation baseline
-- Auto-state-preservation rule active: project files updated after every meaningful task completion
+- PostgreSQL runs inside the Docker container (dev only, not production architecture)
+- pgvector extension version: 0.8.0 (supports vector(1536) for OpenAI embeddings)
+- IVFFlat index warning on empty tables is expected; index rebuilds on sufficient data
+- `fileParallelism: false` in vitest config — required for DB integration test ordering
+- Auto-state-preservation rule active

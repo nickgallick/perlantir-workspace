@@ -25,8 +25,8 @@ export {
 } from './roles.js';
 
 // Database
-export { createPool, healthCheck } from './db/index.js';
-export type { Pool } from './db/index.js';
+export { createPool, healthCheck, migrate, migrationStatus } from './db/index.js';
+export type { Pool, MigrateResult } from './db/index.js';
 
 // Embeddings & similarity
 export {
@@ -34,3 +34,20 @@ export {
   cosineSimilarity,
 } from './context-compiler/index.js';
 export type { EmbeddingFn } from './context-compiler/index.js';
+
+// Decision Graph — CRUD + traversal
+export {
+  createDecision,
+  getDecision,
+  listDecisions,
+  updateDecisionStatus,
+  createEdge,
+  listEdgesBySource,
+  listEdgesByTarget,
+  listEdgesByDecision,
+  deleteEdge,
+  listEdgesByRelationship,
+  getConnectedDecisions,
+  getProjectGraph,
+} from './decision-graph/index.js';
+export type { CreateEdgeParams } from './decision-graph/index.js';

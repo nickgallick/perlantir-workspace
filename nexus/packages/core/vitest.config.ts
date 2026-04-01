@@ -4,5 +4,6 @@ export default defineConfig({
   test: {
     include: ['tests/**/*.test.ts'],
     testTimeout: 30000,
+    fileParallelism: false,  // DB integration tests must run sequentially
   },
 });

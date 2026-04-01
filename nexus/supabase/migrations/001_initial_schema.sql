@@ -232,6 +232,7 @@ RETURNS TABLE (
   via_relationship TEXT
 ) AS $$
 WITH RECURSIVE graph_walk AS (
+  -- Base case: the starting decision
   SELECT
     d.id AS decision_id,
     0 AS depth,
@@ -242,27 +243,27 @@ WITH RECURSIVE graph_walk AS (
 
   UNION ALL
 
+  -- Recursive case: traverse edges in both directions
   SELECT
-    e.target_id AS decision_id,
+    neighbor.id AS decision_id,
     gw.depth + 1 AS depth,
-    gw.path || e.target_id AS path,
-    e.relationship AS via_relationship
+    gw.path || neighbor.id AS path,
+    neighbor.rel AS via_relationship
   FROM graph_walk gw
-  JOIN decision_edges e ON e.source_id = gw.decision_id
+  JOIN LATERAL (
+    -- Forward edges (source → target)
+    SELECT e.target_id AS id, e.relationship AS rel
+    FROM decision_edges e
+    WHERE e.source_id = gw.decision_id
+      AND NOT (e.target_id = ANY(gw.path))
+    UNION ALL
+    -- Reverse edges (target → source)
+    SELECT e.source_id AS id, e.relationship || '_reverse' AS rel
+    FROM decision_edges e
+    WHERE e.target_id = gw.decision_id
+      AND NOT (e.source_id = ANY(gw.path))
+  ) neighbor ON true
   WHERE gw.depth < max_depth
-    AND NOT (e.target_id = ANY(gw.path))
-
-  UNION ALL
-
-  SELECT
-    e.source_id AS decision_id,
-    gw.depth + 1 AS depth,
-    gw.path || e.source_id AS path,
-    e.relationship || '_reverse' AS via_relationship
-  FROM graph_walk gw
-  JOIN decision_edges e ON e.target_id = gw.decision_id
-  WHERE gw.depth < max_depth
-    AND NOT (e.source_id = ANY(gw.path))
 )
 SELECT DISTINCT ON (decision_id)
   decision_id,

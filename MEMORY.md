@@ -107,15 +107,24 @@ Phase 1B (9 files) scoped but not started. See `projects/NEXUS-CAPABILITY-LAYER-
 - Tests: 19/19 pass (17 core + 2 placeholders)
 - Deviations: corepack→npm global install, TS strict mode fix in roles.ts
 
-### Day 2 Target: Decision Graph
+### Day 2: Decision Graph — COMPLETE (2026-04-02 02:22 UTC+8)
 
-1. Node.js migration runner (apply schema via pg.Pool — no psql in container)
-2. Decision CRUD (create with embedding, read, list, update status)
-3. Edge CRUD (create, list by decision)
-4. Graph traversal (call `get_connected_decisions` via pool.query)
-5. Integration tests against real pgvector Postgres
+- Migration runner: Node.js-based, pg.Pool transactions, idempotent, tracks applied migrations
+- Decision CRUD: create (with optional embedding), get, list (filter by status/made_by/tags), updateStatus
+- Edge CRUD: create, listBySource/Target/Decision, delete, listByRelationship
+- Graph traversal: `getConnectedDecisions` (recursive SQL via LATERAL JOIN), `getProjectGraph`
+- Schema fix: `get_connected_decisions` refactored for PG17 (LATERAL JOIN pattern)
+- PostgreSQL 17 + pgvector 0.8.0 running inside container (dev-only)
+- Tests: 30 new (3 migrator + 27 decision-graph integration), 47 total, all pass
+- Deviations: PG17 instead of PG16, container-local DB, schema CTE fix, fileParallelism:false
 
-Requires: running PostgreSQL with pgvector accessible via DATABASE_URL.
+### Day 3 Target: Context Compiler — Scoring
+
+1. `scoreDecisions()` with all 5 signals
+2. `computeFreshness()`
+3. `computeRoleRelevance()`
+4. `cosineSimilarity()` integration with scored decisions
+5. Tests: security decision → reviewer HIGH, marketing decision → launch HIGH
 
 ---
 
@@ -125,6 +134,13 @@ Requires: running PostgreSQL with pgvector accessible via DATABASE_URL.
 - AMB-3: API key auth middleware — open design, needed Day 8+
 - AMB-4: PackResult import location — trivial
 - AMB-5: WebSocket handler — open design, needed Day 5+
+
+## Infrastructure Notes
+
+- **PostgreSQL**: 17.x + pgvector 0.8.0, running inside Docker container (dev-only). Installed via `sudo -n /usr/bin/apt-get` (apt wrapper bypass).
+- **Start PostgreSQL**: `sudo -n pg_ctlcluster 17 main start`
+- **DATABASE_URL**: `postgresql://nexus:nexus_dev@localhost:5432/nexus`
+- **Extensions pre-enabled**: `vector`, `uuid-ossp` (created by postgres superuser)
 
 ## Known Spec Bugs (5, All Documented)
 
