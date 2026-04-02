@@ -90,3 +90,15 @@ export async function startServer(options?: {
     console.log(`[NEXUS] Server listening on port ${port}`);
   });
 }
+
+// Auto-start when run directly (e.g., node packages/server/dist/index.js)
+const isMain =
+  typeof process !== 'undefined' &&
+  process.argv[1] &&
+  (process.argv[1].endsWith('/index.js') || process.argv[1].endsWith('/index.mjs'));
+if (isMain) {
+  startServer().catch((err) => {
+    console.error('[NEXUS] Fatal startup error:', err);
+    process.exit(1);
+  });
+}
