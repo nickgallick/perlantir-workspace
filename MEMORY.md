@@ -207,7 +207,7 @@ Completion standard tightened: detect → resolve/classify → re-run verificati
 - Plan: `projects/nexus-v1/PHASE-8-SKILL-LAYER-PLAN.md`
 - Batch 1 (Backend): 6 skills in `agents/backend/skills/`
 - Batch 2 (Architect): 5 skills in `agents/architect/skills/`
-- Key artifact: SYSTEM-INVARIANT-ENFORCEMENT defines 10 named invariants (INV-1 through INV-10)
+- **Canonical shared artifact**: `projects/nexus-v1/shared/NEXUS-SYSTEM-INVARIANTS.md` — 10 invariants (INV-1 through INV-10), referenced by all agents. Extracted from SKILL-SYSTEM-INVARIANT-ENFORCEMENT into shared file for cross-agent use.
 - Key artifact: DATA-CONTRACT-INTEGRITY documents the 5-layer parsing chain and parser duplication locations
 - Remaining: QA (5), Security (5), DevOps (4), Docs (3), Product (3), Demo/Consumer (2)
 

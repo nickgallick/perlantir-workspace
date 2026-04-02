@@ -27,67 +27,16 @@ Identify, document, and enforce system invariants that must hold across all chan
 
 ### Invariant Registry
 
-Each invariant has: ID, statement, enforcement mechanism, test location, violation severity.
+**Canonical source**: `projects/nexus-v1/shared/NEXUS-SYSTEM-INVARIANTS.md`
 
----
+All 10 invariants (INV-1 through INV-10) are defined there with: ID, statement, enforcement mechanism, and failure signal. Do not duplicate definitions here — read the shared file.
 
-**INV-1: Role Differentiation**
-- **Statement**: Given the same project state and task description, different agent roles MUST produce materially different `ContextPackage` outputs (different scores, different decision ordering, or different included decisions).
-- **Enforcement**: `role-differentiation.test.ts` (11 assertions), `e2e.test.ts` (2 assertions), `routes.test.ts` (1 assertion)
-- **Violation severity**: CRITICAL — this is the product's core value proposition
-- **What "materially different" means**: At least one of: (a) different `combined_score` for the same decision across roles, (b) different top-ranked decision, (c) different number of included decisions
-- **What is NOT a violation**: Identical scores for a decision that has zero role-differentiating signals (no `affects`, no matching tags). This means the test data lacks differentiation, not the system.
+**Severity classification** (supplementary to the shared file):
+- CRITICAL (product-invalidating): INV-1 (Role Differentiation), INV-2 (Scoring Fidelity), INV-10 (Locked Decisions)
+- HIGH (system-breaking): INV-3 (Error Envelope), INV-4 (Determinism), INV-5 (Status Penalty), INV-6 (Package Boundary), INV-9 (Cascade Deletion)
+- MEDIUM (quality-degrading): INV-7 (Budget Respect), INV-8 (Graph Monotonicity)
 
-**INV-2: Scoring Formula Fidelity**
-- **Statement**: The scoring formula MUST match `NEXUS-ALGORITHM-REFERENCE.md` exactly. No signal weight changes, no penalty changes, no formula restructuring without explicit operator approval.
-- **Enforcement**: `scoring.test.ts` (43 tests with exact numeric expectations to 3 decimal places)
-- **Violation severity**: CRITICAL — scoring drives everything downstream
-- **Locked constants**: `WEIGHT_DIRECT_AFFECT=0.4`, `WEIGHT_TAG_MATCHING=0.2`, `WEIGHT_ROLE_RELEVANCE=0.15`, `WEIGHT_SEMANTIC=0.25`, `RELEVANCE_BLEND=0.7`, `FRESHNESS_BLEND=0.3`, `ROLE_TAG_MAP_THRESHOLD=0.8`
-
-**INV-3: Error Envelope Consistency**
-- **Statement**: Every HTTP error response from the server MUST have the shape `{ error: { code: string, message: string, details?: unknown } }`. No exceptions.
-- **Enforcement**: `routes.test.ts` (error envelope tests), `e2e.test.ts` (NexusApiError parsing)
-- **Violation severity**: HIGH — SDK error handling depends on this shape
-- **Covers**: 400, 404, 500 responses. Also covers `app.onError()` fallback for unhandled exceptions.
-
-**INV-4: Compilation Determinism**
-- **Statement**: Given identical inputs (`agent_id`, `task_description`, `max_tokens`, database state) and a fixed `now` timestamp, `compile()` MUST produce identical `ContextPackage` output every time.
-- **Enforcement**: `compiler.test.ts` (determinism tests use fixed `now`)
-- **Violation severity**: HIGH — non-determinism makes debugging impossible
-- **Known exception**: If embeddings are generated via OpenAI at compile time (not pre-stored), the embedding may vary slightly. In practice, embeddings are stored at decision creation time.
-
-**INV-5: Status Penalty Application**
-- **Statement**: Superseded decisions MUST be scored with penalty factor 0.4 (if profile includes superseded) or 0.1 (if excluded). Reverted decisions MUST be scored with penalty 0.05. Active decisions MUST receive no penalty (factor 1.0).
-- **Enforcement**: `scoring.test.ts` (penalty-specific tests)
-- **Violation severity**: HIGH — wrong penalties cause stale decisions to dominate context
-
-**INV-6: Package Boundary Integrity**
-- **Statement**: `@nexus-ai/core` MUST NOT import from `hono`, `@nexus-ai/server`, or `@nexus-ai/sdk`. `@nexus-ai/sdk` MUST NOT import `pg` at runtime (only in devDependencies for tests). `@nexus-ai/server` MUST NOT contain business logic that belongs in core.
-- **Enforcement**: `package.json` dependency declarations, TypeScript build (import errors)
-- **Violation severity**: HIGH — boundary violations create circular dependencies and split concerns
-- **See**: SKILL-PACKAGE-BOUNDARY-ENFORCEMENT for detailed rules
-
-**INV-7: Budget Respect**
-- **Statement**: `packIntoBudget()` MUST NOT produce a `PackResult` where `totalTokens > maxTokens` (except by the margin of a single item's tokens, since items are packed greedily).
-- **Enforcement**: `compiler.test.ts` (packer tests)
-- **Violation severity**: MEDIUM — budget overflow wastes context window
-
-**INV-8: Graph Expansion Monotonicity**
-- **Statement**: `expandGraphContext()` MUST NOT remove or downgrade existing scored decisions. It may only add new decisions or replace lower-scored entries with higher ones.
-- **Enforcement**: `compiler.test.ts` (graph expansion tests)
-- **Violation severity**: MEDIUM — violating this causes scored decisions to "disappear"
-
-**INV-9: Cascade Deletion**
-- **Statement**: Deleting a project MUST cascade-delete all agents, decisions, edges, artifacts, and notifications belonging to that project. No orphaned rows.
-- **Enforcement**: SQL FK constraints (`ON DELETE CASCADE`), route test cleanup
-- **Violation severity**: HIGH — orphaned data corrupts future queries
-
-**INV-10: Locked Decisions**
-- **Statement**: Decisions listed as LOCKED in `NEXUS-LOCKED-DECISIONS.md` cannot be changed by any agent without explicit operator override. Includes: TypeScript strict, Node.js 22, PostgreSQL + pgvector, raw pg driver (no Supabase), Hono, Vitest, Turborepo + pnpm.
-- **Enforcement**: LOCKED-DECISIONS.md review during architectural decisions
-- **Violation severity**: CRITICAL — locked decisions define the system identity
-
----
+**What "materially different" means for INV-1**: At least one of: (a) different `combined_score` for the same decision across roles, (b) different top-ranked decision, (c) different number of included decisions. Identical scores for a decision with zero role-differentiating signals (no `affects`, no matching tags) is NOT a violation — it means test data lacks differentiation, not the system.
 
 ### Invariant Verification Protocol
 
