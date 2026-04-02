@@ -6,10 +6,10 @@
 
 ```
 schema-version      : 1.0.0
-checkpoint-id       : 014
-prior-checkpoint-id : 013
+checkpoint-id       : 015
+prior-checkpoint-id : 014
 last-writer         : Governor
-last-updated        : 2026-04-02 15:00 UTC+8
+last-updated        : 2026-04-02 19:33 UTC+8
 active-owner        : Governor
 lock-status         : UNLOCKED
 ```
@@ -20,14 +20,14 @@ lock-status         : UNLOCKED
 
 ```
 project             : Nexus v1
-phase               : V1 Ship Closure
+phase               : Post-V1 Polish
 approval-category   : 2
-approval-phrase     : "proceed to the final packaging / ship-closure phase"
-approval-timestamp  : 2026-04-02 15:00 UTC+8
-approved-scope      : Close 6 ship blockers (B-1 through B-6), final packaging, no new features
+approval-phrase     : "Plan approved with one tightening pass"
+approval-timestamp  : 2026-04-02 19:33 UTC+8
+approved-scope      : README conversion-grade rewrite, demo clarity upgrade, first-user path
 approval-freshness  : FRESH
 lifecycle           : COMPLETED
-status              : V1-COMPLETE
+status              : POLISH-COMPLETE
 session-termination : CLEAN
 recovery-mode       : NORMAL
 ```

@@ -251,6 +251,13 @@ Completion standard tightened: detect → resolve/classify → re-run verificati
 - Final: 214 tests (11 files), 3/3 packages, zero errors
 - **Nexus v1: COMPLETE**
 
+## Post-V1 Polish — COMPLETE (2026-04-02 19:33 UTC+8)
+
+- README rewritten as conversion-grade artifact: problem→solution arc, before/after contrast, compile output example, "Why not vector search/memory/orchestration?", "What Nexus is/is not", "Try It in 5 Minutes", OpenClaw usage framing
+- Demo script upgraded: ANSI color, opening banner, side-by-side score comparison table, role-specific coloring, clear "why outputs differed" summary, timing
+- First-user path embedded in README: 4 steps, clone→docker compose→seed→compile for 2 roles→run demo
+- No feature changes, no architecture changes, no test changes. 214/214 pass.
+
 ---
 
 ## Remaining Ambiguities (Non-Blocking)
