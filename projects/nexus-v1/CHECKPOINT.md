@@ -6,10 +6,10 @@
 
 ```
 schema-version      : 1.0.0
-checkpoint-id       : 013
-prior-checkpoint-id : 012
+checkpoint-id       : 014
+prior-checkpoint-id : 013
 last-writer         : Governor
-last-updated        : 2026-04-02 12:11 UTC+8
+last-updated        : 2026-04-02 15:00 UTC+8
 active-owner        : Governor
 lock-status         : UNLOCKED
 ```
@@ -20,14 +20,14 @@ lock-status         : UNLOCKED
 
 ```
 project             : Nexus v1
-phase               : Phase 10 — V1 Completion Gate
+phase               : V1 Ship Closure
 approval-category   : 2
-approval-phrase     : "Proceed to Phase 10: V1 Completion Gate"
-approval-timestamp  : 2026-04-02 12:11 UTC+8
-approved-scope      : Define and lock V1 complete criteria, audit current state, issue ship recommendation
+approval-phrase     : "proceed to the final packaging / ship-closure phase"
+approval-timestamp  : 2026-04-02 15:00 UTC+8
+approved-scope      : Close 6 ship blockers (B-1 through B-6), final packaging, no new features
 approval-freshness  : FRESH
 lifecycle           : COMPLETED
-status              : PHASE-COMPLETE
+status              : V1-COMPLETE
 session-termination : CLEAN
 recovery-mode       : NORMAL
 ```

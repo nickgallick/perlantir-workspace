@@ -1,14 +1,14 @@
 # STATUS — Nexus v1
 
-**Current Phase**: Phase 10 — V1 Completion Gate — COMPLETE
-**Sub-phase**: Gate document written, ship recommendation issued
-**Blockers**: 6 ship blockers identified (B-1 through B-6)
-**Last Updated**: 2026-04-02 12:11 UTC+8
+**Current Phase**: V1 COMPLETE
+**Sub-phase**: All blockers closed, final packaging done
+**Blockers**: None
+**Last Updated**: 2026-04-02 15:00 UTC+8
 
 ## Build Health
 
 - **Build**: 3/3 packages, zero errors
-- **Tests**: 216/216 pass (13 test files: 8 core + 3 SDK + 2 server)
+- **Tests**: 214/214 pass (11 test files: 8 core + 2 SDK + 1 server)
 - **Regressions**: None
 
 ## Completed Days
@@ -65,43 +65,27 @@
 
 ### SB-1: Auth Key Timing-Safe Comparison
 
-**Status**: Tracked — not yet implemented
-**Priority**: Must fix before production
-**Added**: 2026-04-02 10:17 UTC+8
-**File**: `packages/server/src/middleware/auth.ts` line ~36
-**Issue**: `token !== apiKey` uses short-circuit string comparison — timing attack surface.
-**Fix**: Replace with `crypto.timingSafeEqual(Buffer.from(token), Buffer.from(apiKey))`. ~3 lines changed.
-**Reference**: `agents/security/skills/SKILL-AUTH-MIDDLEWARE-REVIEW.md` — Vulnerability 1
+**Status**: ✅ RESOLVED — Phase 9 (H-1)
+**Resolved**: 2026-04-02 11:53 UTC+8
+**Fix applied**: `crypto.timingSafeEqual` with length-safe buffer padding in `packages/server/src/middleware/auth.ts`
 
 ### SB-2: Generic 500 Error Messages
 
-**Status**: Tracked — not yet implemented
-**Priority**: Must fix before production
-**Added**: 2026-04-02 10:17 UTC+8
-**File**: `packages/server/src/middleware/errors.ts` — `registerErrorHandler` unhandled error path
-**Issue**: Raw `err.message` returned in HTTP 500 responses. Can leak database URLs, file paths, query fragments.
-**Fix**: Replace `const message = err instanceof Error ? err.message : 'Internal server error'` with `const message = 'Internal server error'`. Keep `console.error` for stderr logging. ~1 line changed.
-**Reference**: `agents/security/skills/SKILL-SENSITIVE-DATA-EXPOSURE-REVIEW.md` — Surface 1
+**Status**: ✅ RESOLVED — Phase 9 (H-2)
+**Resolved**: 2026-04-02 11:53 UTC+8
+**Fix applied**: Static `'Internal server error'` in unhandled error path. Test verifies no raw error leak.
 
 ### SB-3: Server Startup Migration
 
-**Status**: Tracked — not yet implemented
-**Priority**: Must fix before production
-**Added**: 2026-04-02 11:11 UTC+8
-**File**: `packages/server/src/index.ts` — currently comments only, no startup logic
-**Issue**: Server entry point does not call `migrate()` before accepting HTTP requests. In production, a fresh deployment or schema update would serve requests against an un-migrated database.
-**Fix**: Call `migrate(pool, migrationsDir)` at startup, exit on error. Start HTTP listener only after migrations succeed.
-**Reference**: `agents/devops/skills/SKILL-MIGRATION-RUNNER-OPERATIONS.md` — "Option B (recommended)"
+**Status**: ✅ RESOLVED — Phase 9 (H-3)
+**Resolved**: 2026-04-02 11:53 UTC+8
+**Fix applied**: `startServer()` calls `migrate()` before accepting HTTP requests. Exits on failure.
 
 ### SB-4: Health Endpoint Auth Conflict
 
-**Status**: Tracked — not yet implemented
-**Priority**: Should fix before production
-**Added**: 2026-04-02 11:11 UTC+8
-**File**: `packages/server/src/middleware/auth.ts`, `packages/server/src/app.ts`
-**Issue**: `/api/health` is under `/api/*` scope, so auth middleware applies. Docker health checks and monitoring tools cannot provide a Bearer token. Health checks fail when `NEXUS_API_KEY` is set.
-**Fix**: Either exempt `/api/health` from auth (add early-return in middleware for health path) or document an authenticated health-check command pattern.
-**Reference**: `agents/devops/skills/SKILL-HEALTH-CHECK-VERIFICATION.md` — auth conflict section
+**Status**: ✅ RESOLVED — Phase 9 (H-4)
+**Resolved**: 2026-04-02 11:53 UTC+8
+**Fix applied**: `/api/health` exempt from auth middleware. Tests verify unauthenticated access succeeds.
 
 ---
 

@@ -244,6 +244,13 @@ Completion standard tightened: detect → resolve/classify → re-run verificati
 - Remaining: 5 steps — clean stubs → Dockerfile → docker-compose → README → final verification
 - Deferred: Hermes, ruflo, orchestration, cloud/marketplace/UI, WebSocket, distillery, per-project keys, perf test implementation, input validation
 
+## V1 Ship Closure — COMPLETE (2026-04-02 15:00 UTC+8)
+
+- All 6 blockers closed: README, Dockerfile, docker-compose.yml, stub cleanup, placeholder removal, stale backlog update
+- Validation clarification: basic v1-safe validation confirmed sufficient (required fields, UUID format, parameterized SQL, auth). Stricter validation (lengths, bounds, enums) correctly deferred to production hardening.
+- Final: 214 tests (11 files), 3/3 packages, zero errors
+- **Nexus v1: COMPLETE**
+
 ---
 
 ## Remaining Ambiguities (Non-Blocking)
