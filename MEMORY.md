@@ -201,6 +201,18 @@ Completion standard tightened: detect → resolve/classify → re-run verificati
 
 ---
 
+## Phase 8: Skill Layer Construction — IN PROGRESS (started 2026-04-02 07:56 UTC+8)
+
+- 33 skills planned across 8 agents (17 critical, 13 soon, 3 later)
+- Plan: `projects/nexus-v1/PHASE-8-SKILL-LAYER-PLAN.md`
+- Batch 1 (Backend): 6 skills in `agents/backend/skills/`
+- Batch 2 (Architect): 5 skills in `agents/architect/skills/`
+- Key artifact: SYSTEM-INVARIANT-ENFORCEMENT defines 10 named invariants (INV-1 through INV-10)
+- Key artifact: DATA-CONTRACT-INTEGRITY documents the 5-layer parsing chain and parser duplication locations
+- Remaining: QA (5), Security (5), DevOps (4), Docs (3), Product (3), Demo/Consumer (2)
+
+---
+
 ## Remaining Ambiguities (Non-Blocking)
 
 - AMB-2: No session summary routes — sessions opt-in/post-launch
