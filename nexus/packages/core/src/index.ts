@@ -28,6 +28,17 @@ export {
 export { createPool, healthCheck, migrate, migrationStatus } from './db/index.js';
 export type { Pool, MigrateResult } from './db/index.js';
 
+// Row parsers (canonical — all modules must use these)
+export {
+  parseProjectRow,
+  parseAgentRow,
+  parseDecisionRow,
+  parseEdgeRow,
+  parseArtifactRow,
+  parseSubscriptionRow,
+  parseNotificationRow,
+} from './db/index.js';
+
 // Embeddings & similarity
 export {
   createOpenAIEmbedder,

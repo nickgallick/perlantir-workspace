@@ -5,6 +5,7 @@
 // ============================================================
 
 import pg from 'pg';
+import { parseDecisionRow } from '../db/parsers.js';
 import type {
   Decision,
   CreateDecisionInput,
@@ -173,25 +174,4 @@ export async function updateDecisionStatus(
  * Parse a raw database row into a typed Decision.
  * Handles JSONB → object conversion and embedding string → number[].
  */
-function parseDecisionRow(row: Record<string, unknown>): Decision {
-  return {
-    ...row,
-    alternatives_considered:
-      typeof row.alternatives_considered === 'string'
-        ? JSON.parse(row.alternatives_considered as string)
-        : (row.alternatives_considered as Decision['alternatives_considered']),
-    metadata:
-      typeof row.metadata === 'string'
-        ? JSON.parse(row.metadata as string)
-        : (row.metadata as Record<string, unknown>),
-    embedding: row.embedding
-      ? typeof row.embedding === 'string'
-        ? JSON.parse(row.embedding as string)
-        : (row.embedding as number[])
-      : undefined,
-    created_at: String(row.created_at),
-    updated_at: String(row.updated_at),
-    validated_at: row.validated_at ? String(row.validated_at) : undefined,
-    supersedes_id: row.supersedes_id ? String(row.supersedes_id) : undefined,
-  } as Decision;
-}
+

@@ -508,3 +508,67 @@ describe('End-to-End Flow', () => {
     await pool.query('DELETE FROM projects WHERE id = $1', [pid]);
   });
 });
+
+// ============================================================
+// H-4: Health endpoint accessible without auth
+// ============================================================
+describe('Health auth exemption', () => {
+  it('returns 200 for /api/health without Authorization header when API key is set', async () => {
+    const originalKey = process.env.NEXUS_API_KEY;
+    try {
+      process.env.NEXUS_API_KEY = 'test-secret-key-for-health-check';
+      const res = await app.request('/api/health');
+      expect(res.status).toBe(200);
+      const body = (await res.json()) as { status: string };
+      expect(body.status).toBe('ok');
+    } finally {
+      if (originalKey === undefined) {
+        delete process.env.NEXUS_API_KEY;
+      } else {
+        process.env.NEXUS_API_KEY = originalKey;
+      }
+    }
+  });
+
+  it('still requires auth for non-health endpoints when API key is set', async () => {
+    const originalKey = process.env.NEXUS_API_KEY;
+    try {
+      process.env.NEXUS_API_KEY = 'test-secret-key-for-auth-check';
+      const res = await app.request('/api/projects');
+      expect(res.status).toBe(401);
+    } finally {
+      if (originalKey === undefined) {
+        delete process.env.NEXUS_API_KEY;
+      } else {
+        process.env.NEXUS_API_KEY = originalKey;
+      }
+    }
+  });
+});
+
+// ============================================================
+// H-2: Generic 500 error body — must not leak internal details
+// ============================================================
+describe('Error sanitization', () => {
+  it('returns generic message for unhandled errors, not raw details', async () => {
+    // Create a separate Hono app that throws a raw error with sensitive info
+    const { Hono } = await import('hono');
+    const { registerErrorHandler } = await import('../src/middleware/errors.js');
+
+    const testApp = new Hono();
+    registerErrorHandler(testApp);
+
+    testApp.get('/api/explode', () => {
+      throw new Error('Connection refused: postgresql://secret:password@db:5432/prod');
+    });
+
+    const res = await testApp.request('/api/explode');
+    expect(res.status).toBe(500);
+    const body = (await res.json()) as { error: { code: string; message: string } };
+    expect(body.error.code).toBe('INTERNAL_ERROR');
+    expect(body.error.message).toBe('Internal server error');
+    // Must NOT contain the raw error details
+    expect(body.error.message).not.toContain('postgresql');
+    expect(body.error.message).not.toContain('password');
+  });
+});

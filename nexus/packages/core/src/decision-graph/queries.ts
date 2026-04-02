@@ -4,6 +4,7 @@
 // ============================================================
 
 import pg from 'pg';
+import { parseEdgeRow } from '../db/parsers.js';
 import type { DecisionEdge, EdgeRelationship } from '../types.js';
 
 export interface CreateEdgeParams {
@@ -105,9 +106,4 @@ export async function listEdgesByRelationship(
   return result.rows.map((r: Record<string, unknown>) => parseEdgeRow(r));
 }
 
-function parseEdgeRow(row: Record<string, unknown>): DecisionEdge {
-  return {
-    ...row,
-    created_at: String(row.created_at),
-  } as DecisionEdge;
-}
+

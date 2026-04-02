@@ -13,6 +13,7 @@ import type {
   RoleNotification,
   Notification,
 } from '../types.js';
+import { parseAgentRow } from '../db/parsers.js';
 
 // ---- Role Context Map (from spec §10) ----
 const ROLE_CONTEXT_MAP: Record<string, string> = {
@@ -196,17 +197,4 @@ export class ChangePropagator {
   }
 }
 
-// ============================================================
-// Row parser
-// ============================================================
-function parseAgentRow(row: Record<string, unknown>): Agent {
-  return {
-    ...row,
-    relevance_profile:
-      typeof row.relevance_profile === 'string'
-        ? JSON.parse(row.relevance_profile as string)
-        : row.relevance_profile,
-    created_at: String(row.created_at),
-    updated_at: String(row.updated_at),
-  } as Agent;
-}
+

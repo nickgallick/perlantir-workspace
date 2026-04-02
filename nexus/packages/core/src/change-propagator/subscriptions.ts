@@ -5,6 +5,7 @@
 // ============================================================
 
 import pg from 'pg';
+import { parseSubscriptionRow } from '../db/parsers.js';
 import type { Subscription } from '../types.js';
 
 export interface CreateSubscriptionInput {
@@ -92,11 +93,4 @@ export async function deleteAgentSubscriptions(
   return result.rowCount ?? 0;
 }
 
-function parseSubscriptionRow(row: Record<string, unknown>): Subscription {
-  return {
-    id: String(row.id),
-    agent_id: String(row.agent_id),
-    topic: String(row.topic),
-    notify_on: row.notify_on as ('update' | 'supersede' | 'revert')[],
-  };
-}
+

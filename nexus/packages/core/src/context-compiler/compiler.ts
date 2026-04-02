@@ -21,6 +21,7 @@ import type { ScoringResult } from './scoring.js';
 import { packIntoBudget } from './packer.js';
 import { formatAsMarkdown, formatAsJson } from './formatter.js';
 import { getConnectedDecisions } from '../decision-graph/traversal.js';
+import { parseDecisionRow, parseArtifactRow } from '../db/parsers.js';
 
 // ---- Constants ----
 const DEFAULT_CONTEXT_BUDGET = 8000;
@@ -414,47 +415,4 @@ async function fetchSessions(
   })) as SessionSummary[];
 }
 
-// ============================================================
-// Row parsers (shared patterns with graph.ts)
-// ============================================================
 
-function parseDecisionRow(row: Record<string, unknown>): Decision {
-  return {
-    ...row,
-    alternatives_considered:
-      typeof row.alternatives_considered === 'string'
-        ? JSON.parse(row.alternatives_considered as string)
-        : (row.alternatives_considered as Decision['alternatives_considered']),
-    metadata:
-      typeof row.metadata === 'string'
-        ? JSON.parse(row.metadata as string)
-        : (row.metadata as Record<string, unknown>),
-    embedding: row.embedding
-      ? typeof row.embedding === 'string'
-        ? JSON.parse(row.embedding as string)
-        : (row.embedding as number[])
-      : undefined,
-    created_at: String(row.created_at),
-    updated_at: String(row.updated_at),
-    validated_at: row.validated_at ? String(row.validated_at) : undefined,
-    supersedes_id: row.supersedes_id ? String(row.supersedes_id) : undefined,
-  } as Decision;
-}
-
-function parseArtifactRow(row: Record<string, unknown>): ScoredArtifact['artifact'] {
-  return {
-    ...row,
-    metadata:
-      typeof row.metadata === 'string'
-        ? JSON.parse(row.metadata as string)
-        : (row.metadata as Record<string, unknown>),
-    related_decision_ids: row.related_decision_ids as string[] ?? [],
-    created_at: String(row.created_at),
-    updated_at: String(row.updated_at),
-    embedding: row.embedding
-      ? typeof row.embedding === 'string'
-        ? JSON.parse(row.embedding as string)
-        : (row.embedding as number[])
-      : undefined,
-  } as ScoredArtifact['artifact'];
-}

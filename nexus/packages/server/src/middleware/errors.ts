@@ -52,8 +52,9 @@ export function registerErrorHandler(app: Hono): void {
       );
     }
 
-    const message = err instanceof Error ? err.message : 'Internal server error';
+    // Raw detail preserved in stderr only; never returned to client
     console.error('[NEXUS] Unhandled error:', err);
+    const message = 'Internal server error';
     return c.json<ErrorResponse>(
       {
         error: {
