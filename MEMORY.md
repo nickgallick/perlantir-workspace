@@ -221,7 +221,8 @@ Completion standard tightened: detect → resolve/classify → re-run verificati
 - **PB-1 upgraded**: Staged enforcement — Phase A (warn, non-blocking) → Phase B (CI fail, blocking after ≥ 3 baseline runs).
 - Batch 5 (DevOps): 4 skills in `agents/devops/skills/` — POSTGRES-OPERATIONS (with mandatory dev-vs-production section + transition checklist), MIGRATION-RUNNER-OPERATIONS, DOCKER-COMPOSE-MANAGEMENT, HEALTH-CHECK-VERIFICATION
 - Batch 6 (Docs): 3 skills in `agents/docs/skills/` — API-REFERENCE-GENERATION, SDK-USAGE-GUIDE, DECISION-CONTEXT-EXPLANATION. All source-of-truth mapped: API ref derives from app.ts+routes.test.ts, SDK guide from client.ts+e2e.test.ts, concept explanation from KEY-MESSAGING.md+comparison.ts+ROLE-DIFFERENTIATION-PROOF.md.
-- Remaining: Product (3), Demo/Consumer (2)
+- Batch 7 (Product): 3 skills in `agents/product/skills/` — SCOPE-GATE-ENFORCEMENT (3-step gate with pre-computed rejections, backlog cross-ref), ROLE-TEMPLATE-DESIGN (roleTagMap cliff at 0.8, ≥2 exclusive tags rule, compliance example), DEMO-SCENARIO-CURATION (5-criteria validation, 3 candidate scenarios, 1-demo-at-launch rule). All include "bad product move" section.
+- Remaining: Demo/Consumer (2)
 
 ---
 
