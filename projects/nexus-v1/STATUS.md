@@ -1,9 +1,17 @@
 # STATUS — Nexus v1
 
-**Current Phase**: Post-V1 Polish — COMPLETE
-**Sub-phase**: All 3 polish items delivered
-**Blockers**: None
-**Last Updated**: 2026-04-02 19:33 UTC+8
+**Current Phase**: Post-V1 Roadmap — COMPLETE
+**Sub-phase**: Roadmap created, awaiting Phase A approval
+**Blockers**: None — Phase A (Live OpenClaw Integration) ready to begin on approval
+**Last Updated**: 2026-04-02 21:04 UTC+8
+
+## Post-V1 Roadmap
+
+See `POST-V1-ROADMAP.md` for full roadmap. Execution order:
+- **Phase A**: Live OpenClaw Integration (Governor ↔ Nexus protocol, real decision recording)
+- **Phase B**: Production Hardening (PB-1, input validation, logging)
+- **Phase C**: Capability Expansion (WebSocket, distillery, per-project keys)
+- **Phase D**: Platform Integration (Hermes, ruflo — blocked on dependencies)
 
 ## Build Health
 

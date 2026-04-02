@@ -6,10 +6,10 @@
 
 ```
 schema-version      : 1.0.0
-checkpoint-id       : 015
-prior-checkpoint-id : 014
+checkpoint-id       : 016
+prior-checkpoint-id : 015
 last-writer         : Governor
-last-updated        : 2026-04-02 19:33 UTC+8
+last-updated        : 2026-04-02 21:04 UTC+8
 active-owner        : Governor
 lock-status         : UNLOCKED
 ```
@@ -20,14 +20,14 @@ lock-status         : UNLOCKED
 
 ```
 project             : Nexus v1
-phase               : Post-V1 Polish
+phase               : Post-V1 Roadmap
 approval-category   : 2
-approval-phrase     : "Plan approved with one tightening pass"
-approval-timestamp  : 2026-04-02 19:33 UTC+8
-approved-scope      : README conversion-grade rewrite, demo clarity upgrade, first-user path
+approval-phrase     : "Proceed to create the post-v1 roadmap"
+approval-timestamp  : 2026-04-02 21:04 UTC+8
+approved-scope      : POST-V1-ROADMAP.md creation — 5 sections, phase-based execution order
 approval-freshness  : FRESH
-lifecycle           : COMPLETED
-status              : POLISH-COMPLETE
+lifecycle           : ROADMAP-DEFINED
+status              : AWAITING-PHASE-A-APPROVAL
 session-termination : CLEAN
 recovery-mode       : NORMAL
 ```

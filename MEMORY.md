@@ -258,6 +258,16 @@ Completion standard tightened: detect → resolve/classify → re-run verificati
 - First-user path embedded in README: 4 steps, clone→docker compose→seed→compile for 2 roles→run demo
 - No feature changes, no architecture changes, no test changes. 214/214 pass.
 
+## Post-V1 Roadmap — CREATED (2026-04-02 21:04 UTC+8)
+
+- `projects/nexus-v1/POST-V1-ROADMAP.md` — 5 sections, phase-based execution
+- **Phase A**: Live OpenClaw Integration — Governor ↔ Nexus protocol, real decision recording, compile before specialist dispatch. **This is first.** Nexus must prove value in live execution before any other work.
+- **Phase B**: Production Hardening — PB-1 (perf baseline, staged warn→CI fail), input validation, structured logging
+- **Phase C**: Capability Expansion — WebSocket push, conversation distillery, per-project keys (driven by Phase A/B usage patterns)
+- **Phase D**: Platform Integration — Hermes + ruflo (blocked on those systems existing)
+- Section 2 (OpenClaw Operator Workflow) defines: when decisions recorded, when compile runs, when supersede used, when propagation matters, Governor/specialist workflows
+- Anti-drift: no phase without approval, Phase A mandatory first, no features during hardening, integration waits for dependencies
+
 ---
 
 ## Remaining Ambiguities (Non-Blocking)
