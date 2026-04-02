@@ -22,22 +22,29 @@
 - ✅ Architect contract: `PHASE-A-ARCHITECT-CONTRACT.md`
 - ✅ Governor approval requested (2026-04-03 01:25 UTC+8)
 
+### Task 1: Architect (COMPLETE)
+- ✅ Protocol refined with context package: `PHASE-A-ARCHITECT-CONTEXT-PACKAGE.md`
+- ✅ 5 decisions created: `PHASE-A-DECISIONS-CREATED.md`
+- ✅ Operator approval received (2026-04-03 01:19 UTC+8)
+- ✅ Task dispatch executed (2026-04-03 01:40 UTC+8)
+- ✅ Task completed (2026-04-03 01:45 UTC+8)
+
 ### Evidence Checklist (In Progress)
 
 | Evidence | Target | Current | Status |
 |----------|--------|---------|--------|
-| A-1: ≥2 specialist tasks with compiled context | 2 tasks | 0 tasks | Pending |
-| A-2: ≥1 real decision from live work | 8 decisions | 0 decisions | Pending |
-| A-3: ≥1 supersede event changes context | 1 event | 0 events | Pending |
+| A-1: ≥2 specialist tasks with compiled context | 2 tasks | 1/2 tasks (Architect done) | In Progress |
+| A-2: ≥1 real decision from live work | 8 decisions | 5/8 decisions (Architect) | In Progress |
+| A-3: ≥1 supersede event changes context | 1 event | 0/1 events (Backend creates) | Pending |
 | A-4: Operator judgment on friction reduction | 1 statement | Pending | Pending |
 
 ### Task Status
 
 | Task | Specialist | Role | Status | Deliverables |
 |------|-----------|------|--------|--------------|
-| 1 | Architect | architect | Awaiting dispatch | PHASE-A-INTEGRATION-PROTOCOL.md + 5 decisions |
-| 2 | Backend | backend | Awaiting Task 1 | SDK methods + 3 decisions + 1 supersede |
-| 3 | QA | qa | Awaiting Task 2 | Supersede test + evidence + 1 decision |
+| 1 | Architect | architect | ✅ COMPLETE (2026-04-03 01:45) | PHASE-A-INTEGRATION-PROTOCOL.md + 5 decisions |
+| 2 | Backend | backend | Ready for dispatch | SDK methods + 3 decisions + 1 supersede |
+| 3 | QA | qa | Awaiting Task 2 complete | Supersede test + evidence + 1 decision |
 
 ---
 
@@ -45,16 +52,16 @@
 
 | ID | Title | Created By | Status | Tags | Links |
 |----|----|-----------|--------|------|-------|
-| DECISION-001 | Governor should compile before every specialist dispatch | Architect (pending) | pending | phase-a, integration | — |
-| DECISION-002 | Decisions recorded after phase completion | Architect (pending) | pending | phase-a, integration | — |
-| DECISION-003 | Specialist can self-serve context refresh mid-task | Architect (pending) | pending | phase-a, integration | — |
-| DECISION-004 | Change Propagator checks before dispatch | Architect (pending) | pending | phase-a, integration | — |
-| DECISION-005 | Protocol integration points + workflow | Architect (pending) | pending | phase-a, integration | — |
-| DECISION-006 | SDK client needs compile() method | Backend (pending) | pending | phase-a, implementation | depends on 001–005 |
-| DECISION-007 | Governor logs all compile calls | Backend (pending) | pending | phase-a, implementation | depends on 001–005 |
-| DECISION-008 | Notification check before dispatch | Backend (pending) | pending | phase-a, implementation | depends on 001–005 |
+| DECISION-PHASE-A-001 | Governor should compile before every specialist dispatch | Architect | pending | phase-a, integration | Protocol §1.1 |
+| DECISION-PHASE-A-002 | Decisions recorded after phase completion | Architect | pending | phase-a, integration | Protocol §1.2 |
+| DECISION-PHASE-A-003 | Specialist can self-serve context refresh mid-task | Architect | pending | phase-a, integration | Protocol §1.4 |
+| DECISION-PHASE-A-004 | Change Propagator checks before dispatch | Architect | pending | phase-a, integration | Protocol §1.3 |
+| DECISION-PHASE-A-005 | Protocol integration points + workflow | Architect | pending | phase-a, integration | Protocol §1–6 |
+| DECISION-PHASE-A-006 | SDK client needs compile() method | Backend (planned) | pending | phase-a, implementation | depends on 001–005 |
+| DECISION-PHASE-A-007 | Governor logs all compile calls | Backend (planned) | pending | phase-a, implementation | depends on 001–005 |
+| DECISION-PHASE-A-008 | Notification check before dispatch | Backend (planned) | pending | phase-a, implementation | depends on 001–005 |
 
-**Total**: 8 decisions planned, 0 created yet (awaiting task execution)
+**Total**: 8 decisions planned, 5 created (Architect), 3 planned (Backend)
 
 ---
 
