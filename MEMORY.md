@@ -227,13 +227,13 @@ Completion standard tightened: detect → resolve/classify → re-run verificati
 
 ---
 
-## Phase 9: Hardening — IN PROGRESS (started 2026-04-02 11:39 UTC+8)
+## Phase 9: Hardening — COMPLETE (2026-04-02 11:39–11:53 UTC+8)
 
 - Plan: `projects/nexus-v1/PHASE-9-HARDENING-PLAN.md`
-- 6 work items: H-1 (timingSafeEqual), H-2 (generic 500), H-3 (startup migration), H-4 (health auth exemption), H-5 (row parser centralization), H-6 (perf enforcement design)
-- 5 implementation items, 1 tracking/design only (H-6)
-- Execution order: H-1 → H-2 → H-4 → H-3 → H-5 → H-6
-- **Status**: Plan written, awaiting implementation execution
+- 6 work items completed: H-1 (timingSafeEqual), H-2 (generic 500), H-3 (startup migration), H-4 (health auth exemption), H-5 (row parser centralization), H-6 (perf enforcement design)
+- Key fix: `parseAgentRow` divergence between core and server resolved — server now uses typed core parsers
+- Tests: 216 (213 existing + 3 new hardening tests), all pass
+- Build: 3/3 packages, zero errors
 
 ---
 

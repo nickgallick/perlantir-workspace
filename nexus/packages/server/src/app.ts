@@ -20,6 +20,10 @@ import {
   deleteEdge,
   compile,
   ChangePropagator,
+  parseProjectRow,
+  parseAgentRow,
+  parseArtifactRow,
+  parseNotificationRow,
 } from '@nexus-ai/core';
 import type {
   CreateDecisionInput,
@@ -83,7 +87,7 @@ export function createApp(config?: ServerConfig): { app: Hono; pool: pg.Pool } {
       [body.name, body.description ?? null, JSON.stringify(body.metadata ?? {})],
     );
 
-    return c.json(parseRow(result.rows[0]), 201);
+    return c.json(parseProjectRow(result.rows[0]), 201);
   });
 
   app.get('/api/projects/:id', async (c) => {
@@ -94,7 +98,7 @@ export function createApp(config?: ServerConfig): { app: Hono; pool: pg.Pool } {
     if (result.rows.length === 0) {
       throw new AppError(404, 'NOT_FOUND', `Project not found: ${id}`);
     }
-    return c.json(parseRow(result.rows[0]));
+    return c.json(parseProjectRow(result.rows[0]));
   });
 
   // ============================================================
@@ -298,7 +302,7 @@ export function createApp(config?: ServerConfig): { app: Hono; pool: pg.Pool } {
       ],
     );
 
-    return c.json(parseRow(result.rows[0]), 201);
+    return c.json(parseArtifactRow(result.rows[0]), 201);
   });
 
   app.get('/api/projects/:id/artifacts', async (c) => {
@@ -309,7 +313,7 @@ export function createApp(config?: ServerConfig): { app: Hono; pool: pg.Pool } {
       'SELECT * FROM artifacts WHERE project_id = $1 ORDER BY created_at DESC',
       [projectId],
     );
-    return c.json(result.rows.map((r: Record<string, unknown>) => parseRow(r)));
+    return c.json(result.rows.map((r: Record<string, unknown>) => parseArtifactRow(r)));
   });
 
   // ============================================================
@@ -351,7 +355,7 @@ export function createApp(config?: ServerConfig): { app: Hono; pool: pg.Pool } {
       `SELECT * FROM notifications WHERE ${conditions.join(' AND ')} ORDER BY created_at DESC LIMIT 50`,
       [agentId],
     );
-    return c.json(result.rows.map((r: Record<string, unknown>) => parseRow(r)));
+    return c.json(result.rows.map((r: Record<string, unknown>) => parseNotificationRow(r)));
   });
 
   app.patch('/api/notifications/:id/read', async (c) => {
@@ -374,23 +378,3 @@ export function createApp(config?: ServerConfig): { app: Hono; pool: pg.Pool } {
   return { app, pool };
 }
 
-// ============================================================
-// Row parsers
-// ============================================================
-function parseRow(row: Record<string, unknown>): Record<string, unknown> {
-  const parsed = { ...row };
-  if (parsed.metadata && typeof parsed.metadata === 'string') {
-    parsed.metadata = JSON.parse(parsed.metadata as string);
-  }
-  if (parsed.created_at) parsed.created_at = String(parsed.created_at);
-  if (parsed.updated_at) parsed.updated_at = String(parsed.updated_at);
-  return parsed;
-}
-
-function parseAgentRow(row: Record<string, unknown>): Record<string, unknown> {
-  const parsed = parseRow(row);
-  if (parsed.relevance_profile && typeof parsed.relevance_profile === 'string') {
-    parsed.relevance_profile = JSON.parse(parsed.relevance_profile as string);
-  }
-  return parsed;
-}

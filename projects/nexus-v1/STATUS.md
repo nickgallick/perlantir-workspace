@@ -1,14 +1,14 @@
 # STATUS — Nexus v1
 
-**Current Phase**: Phase 9 — Hardening — PLANNING COMPLETE
-**Sub-phase**: Plan written, awaiting implementation approval
+**Current Phase**: Phase 9 — Hardening — COMPLETE
+**Sub-phase**: All 6 work items delivered
 **Blockers**: None
-**Last Updated**: 2026-04-02 11:39 UTC+8
+**Last Updated**: 2026-04-02 11:53 UTC+8
 
 ## Build Health
 
 - **Build**: 3/3 packages, zero errors
-- **Tests**: 213/213 pass (13 test files: 8 core + 3 SDK + 2 server)
+- **Tests**: 216/216 pass (13 test files: 8 core + 3 SDK + 2 server)
 - **Regressions**: None
 
 ## Completed Days
