@@ -209,7 +209,10 @@ Completion standard tightened: detect → resolve/classify → re-run verificati
 - Batch 2 (Architect): 5 skills in `agents/architect/skills/`
 - **Canonical shared artifact**: `projects/nexus-v1/shared/NEXUS-SYSTEM-INVARIANTS.md` — 10 invariants (INV-1 through INV-10), referenced by all agents. Extracted from SKILL-SYSTEM-INVARIANT-ENFORCEMENT into shared file for cross-agent use.
 - Key artifact: DATA-CONTRACT-INTEGRITY documents the 5-layer parsing chain and parser duplication locations
-- Remaining: QA (5), Security (5), DevOps (4), Docs (3), Product (3), Demo/Consumer (2)
+- Batch 3 (QA): 5 skills in `agents/qa/skills/` — INTEGRATION-TEST-AUTHORING, ROLE-DIFFERENTIATION-VERIFICATION, SCENARIO-CONSTRUCTION, REGRESSION-DETECTION, COMPILATION-PERFORMANCE-VALIDATION
+- QA skills define: 4-layer verification protocol for INV-1, numeric thresholds for compile perf (50ms/10dec, 150ms/50dec, 500ms/200dec, 2s/1000dec), regression triage decision tree, 7 scenario categories
+- **PB-1 tracked**: Compilation Performance Baseline + Regression Guard — tracked in STATUS.md Performance Backlog, not yet implemented. Requires datasets at 4 sizes, subsystem timing, baseline capture, threshold assertions.
+- Remaining: Security (5), DevOps (4), Docs (3), Product (3), Demo/Consumer (2)
 
 ---
 

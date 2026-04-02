@@ -1,7 +1,7 @@
 # STATUS — Nexus v1
 
 **Current Phase**: Phase 8 — Skill Layer Construction — IN PROGRESS
-**Batch**: 2/8 (Architect) COMPLETE, Batch 3 (QA) next
+**Batch**: 3/8 (QA) COMPLETE, Batch 4 (Security) next
 **Blockers**: None
 **Last Updated**: 2026-04-02 06:10 UTC+8
 
@@ -58,3 +58,40 @@
 - Per-project API keys, key rotation, rate limiting, scoped permissions
 - WebSocket real-time push endpoint
 - Demo requires running server (no in-process mode yet)
+
+---
+
+## Performance Backlog
+
+### PB-1: Compilation Performance Baseline + Regression Guard
+
+**Status**: Tracked — not yet implemented
+**Priority**: Next after Phase 8 skill writing completes
+**Added**: 2026-04-02 09:52 UTC+8
+
+**Scope**:
+1. Generate test datasets at 4 sizes: 10, 50, 200, 1000 decisions (with edges, artifacts, agents)
+2. Measure `compile()` latency broken down by subsystem:
+   - Scoring throughput (pure computation, per-decision)
+   - Graph traversal cost (recursive SQL, per qualifying decision × depth)
+   - Packing time (sort + greedy scan)
+   - Total `compilation_time_ms` end-to-end
+3. Capture baseline timings on current hardware (8-core x86_64, 31 GiB RAM, PG17 local)
+4. Define acceptable thresholds per size:
+   - 10 decisions: < 50ms
+   - 50 decisions: < 150ms
+   - 200 decisions: < 500ms
+   - 1000 decisions: < 2000ms
+5. Add automated performance test with threshold assertions (non-blocking CI initially)
+6. Verify sub-quadratic scaling: 2× decisions should take < 3× time
+
+**References**:
+- Skill: `agents/qa/skills/SKILL-COMPILATION-PERFORMANCE-VALIDATION.md`
+- Invariants: `projects/nexus-v1/shared/NEXUS-SYSTEM-INVARIANTS.md` (INV-4 Determinism, INV-7 Budget Respect)
+- Pipeline: `packages/core/src/context-compiler/compiler.ts`
+
+**Deliverables**:
+- Performance test file (`packages/core/tests/performance.test.ts`)
+- Baseline measurements document
+- Threshold assertions (conservative: 2× expected, to avoid flaky CI)
+- Scaling linearity assertion
