@@ -2,7 +2,7 @@
 
 **Objective**: Transform agents into elite Nexus operators using system-specific execution skills derived from real implementation (Days 1–7), constraints, proof artifacts, and failure modes.
 
-**Status**: IN PROGRESS — Batches 1-4 (Backend, Architect, QA, Security) complete, Batch 5 (DevOps) next.
+**Status**: IN PROGRESS — Batches 1-5 (Backend, Architect, QA, Security, DevOps) complete, Batch 6 (Docs) next.
 
 ---
 

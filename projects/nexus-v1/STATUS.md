@@ -1,7 +1,7 @@
 # STATUS — Nexus v1
 
 **Current Phase**: Phase 8 — Skill Layer Construction — IN PROGRESS
-**Batch**: 4/8 (Security) COMPLETE, Batch 5 (DevOps) next
+**Batch**: 5/8 (DevOps) COMPLETE, Batch 6 (Docs) next
 **Blockers**: None
 **Last Updated**: 2026-04-02 06:10 UTC+8
 
@@ -58,6 +58,30 @@
 - Per-project API keys, key rotation, rate limiting, scoped permissions
 - WebSocket real-time push endpoint
 - Demo requires running server (no in-process mode yet)
+
+---
+
+## Security Backlog
+
+### SB-1: Auth Key Timing-Safe Comparison
+
+**Status**: Tracked — not yet implemented
+**Priority**: Must fix before production
+**Added**: 2026-04-02 10:17 UTC+8
+**File**: `packages/server/src/middleware/auth.ts` line ~36
+**Issue**: `token !== apiKey` uses short-circuit string comparison — timing attack surface.
+**Fix**: Replace with `crypto.timingSafeEqual(Buffer.from(token), Buffer.from(apiKey))`. ~3 lines changed.
+**Reference**: `agents/security/skills/SKILL-AUTH-MIDDLEWARE-REVIEW.md` — Vulnerability 1
+
+### SB-2: Generic 500 Error Messages
+
+**Status**: Tracked — not yet implemented
+**Priority**: Must fix before production
+**Added**: 2026-04-02 10:17 UTC+8
+**File**: `packages/server/src/middleware/errors.ts` — `registerErrorHandler` unhandled error path
+**Issue**: Raw `err.message` returned in HTTP 500 responses. Can leak database URLs, file paths, query fragments.
+**Fix**: Replace `const message = err instanceof Error ? err.message : 'Internal server error'` with `const message = 'Internal server error'`. Keep `console.error` for stderr logging. ~1 line changed.
+**Reference**: `agents/security/skills/SKILL-SENSITIVE-DATA-EXPOSURE-REVIEW.md` — Surface 1
 
 ---
 

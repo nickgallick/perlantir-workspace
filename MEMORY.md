@@ -213,8 +213,11 @@ Completion standard tightened: detect → resolve/classify → re-run verificati
 - QA skills define: 4-layer verification protocol for INV-1, numeric thresholds for compile perf (50ms/10dec, 150ms/50dec, 500ms/200dec, 2s/1000dec), regression triage decision tree, 7 scenario categories
 - **PB-1 tracked**: Compilation Performance Baseline + Regression Guard — tracked in STATUS.md Performance Backlog, not yet implemented. Requires datasets at 4 sizes, subsystem timing, baseline capture, threshold assertions.
 - Batch 4 (Security): 5 skills in `agents/security/skills/` — API-INPUT-VALIDATION, SQL-INJECTION-AUDIT, SENSITIVE-DATA-EXPOSURE-REVIEW, AUTH-MIDDLEWARE-REVIEW, DEPENDENCY-AUDIT
-- Security findings: full SQL query audit (all parameterized, 4 dynamic patterns verified safe), timing attack on auth key comparison (`!==` → needs `timingSafeEqual`), raw error messages leak in 500 responses (needs generic message), no input length/array/enum validation. All with concrete fix code.
-- Remaining: DevOps (4), Docs (3), Product (3), Demo/Consumer (2)
+- Security findings: full SQL query audit (all parameterized, 4 dynamic patterns verified safe), no input length/array/enum validation. All with concrete fix code.
+- **SB-1 tracked**: Auth key timing-safe comparison — `auth.ts` uses `!==`, needs `timingSafeEqual`. Must fix before production.
+- **SB-2 tracked**: Generic 500 error messages — `errors.ts` leaks raw `err.message` in HTTP 500. Must fix before production.
+- Batch 5 (DevOps): 4 skills in `agents/devops/skills/` — POSTGRES-OPERATIONS (with mandatory dev-vs-production section + transition checklist), MIGRATION-RUNNER-OPERATIONS, DOCKER-COMPOSE-MANAGEMENT, HEALTH-CHECK-VERIFICATION
+- Remaining: Docs (3), Product (3), Demo/Consumer (2)
 
 ---
 
