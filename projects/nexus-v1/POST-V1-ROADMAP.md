@@ -131,16 +131,16 @@ The Change Propagator fires notifications when:
 
 ### 4.1 Hermes Readiness
 
-**What**: Hermes is the communication agent in Perlantir — handles cross-agent messaging, external notifications, and communication routing.
+**What**: Hermes is a planned Perlantir component for cross-agent and cross-system communication. Its exact scope and architecture are not yet defined — it may handle messaging, notification delivery, external integrations, or a broader coordination role depending on how the platform evolves.
 
-**Integration point**: Hermes consumes Change Propagator notifications and delivers them to agents via its own transport (not Nexus's responsibility).
+**Integration point**: Hermes would consume Nexus Change Propagator notifications and deliver them to agents via its own transport (not Nexus's responsibility).
 
 **What Nexus needs to provide**:
-- Notification query API (exists: `GET /api/notifications`)
+- Notification query API (exists: `GET /api/agents/:id/notifications`)
 - Webhook/callback registration for new notifications (does not exist)
-- Structured notification payload with enough metadata for Hermes to route (partially exists — needs `target_agent_id` and `urgency` in response)
+- Structured notification payload with enough metadata for an external communication system to route (partially exists — needs `target_agent_id` and `urgency` in response)
 
-**Prerequisite**: Hermes must exist as a defined system with a communication protocol. Nexus adapts its notification output to Hermes's input contract. Not the reverse.
+**Prerequisite**: Hermes must be defined with a concrete scope and protocol. Nexus adapts its notification output to Hermes's input contract once that contract exists. Not the reverse.
 
 **Status**: Blocked on Hermes definition. No Nexus work until Hermes protocol is specified.
 
@@ -152,8 +152,8 @@ The Change Propagator fires notifications when:
 
 **What Nexus needs to provide**:
 - SDK client (exists: `@nexus-ai/sdk`)
-- Compile endpoint (exists: `POST /api/projects/:id/compile`)
-- Agent registration endpoint (exists: `POST /api/agents`)
+- Compile endpoint (exists: `POST /api/compile`)
+- Agent registration endpoint (exists: `POST /api/projects/:id/agents`)
 
 **What ruflo needs to implement**:
 - Pre-dispatch hook that calls Nexus compile
@@ -195,6 +195,17 @@ The Change Propagator fires notifications when:
 2. Implement Governor integration points (SDK calls in Governor dispatch flow)
 3. Record first real decisions from actual Perlantir project work
 4. Validate: compiled context actually improves specialist output vs. manual context loading
+
+**Success rubric — Phase A is complete when all 4 are satisfied**:
+
+| # | Evidence Requirement | Verified By |
+|---|---------------------|-------------|
+| A-1 | ≥ 2 real specialist tasks executed with Nexus-compiled context (not demo data — actual project work dispatched by Governor) | Task logs showing compile call before dispatch + specialist receiving context package |
+| A-2 | ≥ 1 real decision recorded from live work (not seeded — a decision that emerged from actual execution) | Decision exists in DB with `made_by` pointing to a real agent/operator, linked to real project |
+| A-3 | ≥ 1 supersede event that changes downstream compiled context (a decision is superseded and a subsequent compile for an affected agent produces different output than it would have before) | Before/after compile output diff showing the superseded decision's score penalty applied |
+| A-4 | Operator judgment: brief written assessment of whether Nexus reduced manual context loading, repeated instructions, or context drift compared to pre-Nexus workflow | Operator statement in completion report (pass/fail/conditional) |
+
+Phase A cannot be marked complete until all 4 evidence requirements are documented. A-4 is the kill switch — if operator judgment is "fail," Phase A loops with adjustments rather than proceeding to Phase B.
 
 **Why first**: This is the entire point. A context compiler that isn't compiling context for real agents is a demo, not a product. Everything else is premature until Nexus proves value in live execution.
 
