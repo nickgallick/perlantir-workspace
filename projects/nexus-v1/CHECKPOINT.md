@@ -6,10 +6,10 @@
 
 ```
 schema-version      : 1.0.0
-checkpoint-id       : 012
-prior-checkpoint-id : 011
+checkpoint-id       : 013
+prior-checkpoint-id : 012
 last-writer         : Governor
-last-updated        : 2026-04-02 11:53 UTC+8
+last-updated        : 2026-04-02 12:11 UTC+8
 active-owner        : Governor
 lock-status         : UNLOCKED
 ```
@@ -20,11 +20,11 @@ lock-status         : UNLOCKED
 
 ```
 project             : Nexus v1
-phase               : Phase 9 — Hardening
+phase               : Phase 10 — V1 Completion Gate
 approval-category   : 2
-approval-phrase     : "Proceed to Phase 9: Hardening"
-approval-timestamp  : 2026-04-02 11:39 UTC+8
-approved-scope      : 6 work items (H-1 through H-6): security fixes, startup correctness, contract integrity, performance enforcement design
+approval-phrase     : "Proceed to Phase 10: V1 Completion Gate"
+approval-timestamp  : 2026-04-02 12:11 UTC+8
+approved-scope      : Define and lock V1 complete criteria, audit current state, issue ship recommendation
 approval-freshness  : FRESH
 lifecycle           : COMPLETED
 status              : PHASE-COMPLETE

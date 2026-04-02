@@ -1,9 +1,9 @@
 # STATUS — Nexus v1
 
-**Current Phase**: Phase 9 — Hardening — COMPLETE
-**Sub-phase**: All 6 work items delivered
-**Blockers**: None
-**Last Updated**: 2026-04-02 11:53 UTC+8
+**Current Phase**: Phase 10 — V1 Completion Gate — COMPLETE
+**Sub-phase**: Gate document written, ship recommendation issued
+**Blockers**: 6 ship blockers identified (B-1 through B-6)
+**Last Updated**: 2026-04-02 12:11 UTC+8
 
 ## Build Health
 

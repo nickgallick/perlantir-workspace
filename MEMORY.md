@@ -235,6 +235,15 @@ Completion standard tightened: detect → resolve/classify → re-run verificati
 - Tests: 216 (213 existing + 3 new hardening tests), all pass
 - Build: 3/3 packages, zero errors
 
+## Phase 10: V1 Completion Gate — COMPLETE (2026-04-02 12:11 UTC+8)
+
+- Gate document: `projects/nexus-v1/PHASE-10-V1-COMPLETION-GATE.md`
+- **Ship recommendation: NOT YET V1 COMPLETE**
+- Audit: Core 14/14, API 8/8, SDK 6/6, Proof 7/7, Demo 2/2 — all COMPLETE
+- Missing: README (X-1), docker-compose.yml (O-1), Dockerfile (O-2), stub cleanup (B-4/B-5), stale backlog (B-6)
+- Remaining: 5 steps — clean stubs → Dockerfile → docker-compose → README → final verification
+- Deferred: Hermes, ruflo, orchestration, cloud/marketplace/UI, WebSocket, distillery, per-project keys, perf test implementation, input validation
+
 ---
 
 ## Remaining Ambiguities (Non-Blocking)
