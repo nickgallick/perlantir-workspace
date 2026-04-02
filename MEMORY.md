@@ -201,7 +201,7 @@ Completion standard tightened: detect → resolve/classify → re-run verificati
 
 ---
 
-## Phase 8: Skill Layer Construction — IN PROGRESS (started 2026-04-02 07:56 UTC+8)
+## Phase 8: Skill Layer Construction — COMPLETE (2026-04-02 07:56–11:35 UTC+8)
 
 - 33 skills planned across 8 agents (17 critical, 13 soon, 3 later)
 - Plan: `projects/nexus-v1/PHASE-8-SKILL-LAYER-PLAN.md`
@@ -222,7 +222,18 @@ Completion standard tightened: detect → resolve/classify → re-run verificati
 - Batch 5 (DevOps): 4 skills in `agents/devops/skills/` — POSTGRES-OPERATIONS (with mandatory dev-vs-production section + transition checklist), MIGRATION-RUNNER-OPERATIONS, DOCKER-COMPOSE-MANAGEMENT, HEALTH-CHECK-VERIFICATION
 - Batch 6 (Docs): 3 skills in `agents/docs/skills/` — API-REFERENCE-GENERATION, SDK-USAGE-GUIDE, DECISION-CONTEXT-EXPLANATION. All source-of-truth mapped: API ref derives from app.ts+routes.test.ts, SDK guide from client.ts+e2e.test.ts, concept explanation from KEY-MESSAGING.md+comparison.ts+ROLE-DIFFERENTIATION-PROOF.md.
 - Batch 7 (Product): 3 skills in `agents/product/skills/` — SCOPE-GATE-ENFORCEMENT (3-step gate with pre-computed rejections, backlog cross-ref), ROLE-TEMPLATE-DESIGN (roleTagMap cliff at 0.8, ≥2 exclusive tags rule, compliance example), DEMO-SCENARIO-CURATION (5-criteria validation, 3 candidate scenarios, 1-demo-at-launch rule). All include "bad product move" section.
-- Remaining: Demo/Consumer (2)
+- Batch 8 (Demo/Consumer): 2 skills in `agents/frontend/skills/` — SDK-CONSUMER-PATTERNS (golden path, typed error handling, import rules, launch-grade checklist), DEMO-SCRIPT-AUTHORING (4-section architecture, console formatting rules, launch-grade 10-point checklist)
+- **PHASE 8 COMPLETE**: 33 skills, 5,022 lines, 8 agents. All batches delivered.
+
+---
+
+## Phase 9: Hardening — IN PROGRESS (started 2026-04-02 11:39 UTC+8)
+
+- Plan: `projects/nexus-v1/PHASE-9-HARDENING-PLAN.md`
+- 6 work items: H-1 (timingSafeEqual), H-2 (generic 500), H-3 (startup migration), H-4 (health auth exemption), H-5 (row parser centralization), H-6 (perf enforcement design)
+- 5 implementation items, 1 tracking/design only (H-6)
+- Execution order: H-1 → H-2 → H-4 → H-3 → H-5 → H-6
+- **Status**: Plan written, awaiting implementation execution
 
 ---
 

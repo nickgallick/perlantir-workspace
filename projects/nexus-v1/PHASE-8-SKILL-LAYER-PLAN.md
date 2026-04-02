@@ -2,7 +2,7 @@
 
 **Objective**: Transform agents into elite Nexus operators using system-specific execution skills derived from real implementation (Days 1–7), constraints, proof artifacts, and failure modes.
 
-**Status**: IN PROGRESS — Batches 1-7 complete, Batch 8 (Demo/Consumer) next.
+**Status**: COMPLETE — All 8 batches written. 33 skills, 5,022 lines across 8 agents.
 
 ---
 

@@ -1,9 +1,9 @@
 # STATUS — Nexus v1
 
-**Current Phase**: Phase 8 — Skill Layer Construction — IN PROGRESS
-**Batch**: 7/8 (Product) COMPLETE, Batch 8 (Demo/Consumer) next
+**Current Phase**: Phase 9 — Hardening — PLANNING COMPLETE
+**Sub-phase**: Plan written, awaiting implementation approval
 **Blockers**: None
-**Last Updated**: 2026-04-02 06:10 UTC+8
+**Last Updated**: 2026-04-02 11:39 UTC+8
 
 ## Build Health
 
