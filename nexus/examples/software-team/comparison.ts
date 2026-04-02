@@ -23,19 +23,15 @@ const C = {
   cyan: '\x1b[36m',
   magenta: '\x1b[35m',
   red: '\x1b[31m',
-  bg: '\x1b[48;5;236m',
 };
 
 function banner() {
   console.log(`
 ${C.bold}${C.cyan}╔══════════════════════════════════════════════════════════════╗
 ║                                                              ║
-║   NEXUS — Role-Differentiated Context Compilation Demo       ║
+║   NEXUS — Role-Differentiated Context Compilation            ║
 ║                                                              ║
-║   This demo proves:                                          ║
-║   • Same project, different agents → different context       ║
-║   • Scores change based on role and task                     ║
-║   • Superseded decisions get deprioritized automatically     ║
+║   Same project. Different agents. Different context.         ║
 ║                                                              ║
 ╚══════════════════════════════════════════════════════════════╝${C.reset}
 `);
@@ -48,27 +44,14 @@ function hr(title: string) {
   console.log(`${C.cyan}${line}${C.reset}`);
 }
 
-function scoreColor(score: number): string {
-  if (score >= 0.8) return C.green;
-  if (score >= 0.5) return C.yellow;
-  return C.dim;
+function sc(score: number): string {
+  const color = score >= 0.8 ? C.green : score >= 0.5 ? C.yellow : C.dim;
+  return `${color}${score.toFixed(3)}${C.reset}`;
 }
 
-function roleColor(role: string): string {
-  switch (role) {
-    case 'builder': return C.green;
-    case 'reviewer': return C.magenta;
-    case 'launch': return C.yellow;
-    default: return C.cyan;
-  }
-}
-
-function printDecisions(role: string, decisions: Array<{ decision: { title: string }; combined_score: number }>) {
-  const color = roleColor(role);
-  for (const sd of decisions.slice(0, 5)) {
-    const sc = scoreColor(sd.combined_score);
-    console.log(`   ${color}${role.padEnd(10)}${C.reset} ${sc}${sd.combined_score.toFixed(3)}${C.reset} │ ${sd.decision.title}`);
-  }
+function rc(role: string): string {
+  const colors: Record<string, string> = { builder: C.green, reviewer: C.magenta, launch: C.yellow };
+  return `${colors[role] ?? C.cyan}${C.bold}${role.toUpperCase()}${C.reset}`;
 }
 
 async function main() {
@@ -77,24 +60,22 @@ async function main() {
 
   const nx = new NexusClient({ url: SERVER_URL });
 
-  // ── Health check ──
   try {
     await nx.health();
-    console.log(`${C.dim}   Connected to ${SERVER_URL}${C.reset}\n`);
+    console.log(`${C.dim}   Connected to ${SERVER_URL}${C.reset}`);
   } catch {
-    console.error(`${C.red}   Cannot reach server at ${SERVER_URL}. Is it running?${C.reset}`);
+    console.error(`${C.red}   Cannot reach ${SERVER_URL}. Is the server running?${C.reset}`);
     process.exit(1);
   }
 
-  // ── Seed ──
-  console.log(`${C.dim}   Seeding: 6 agents, 10 decisions, 4 edges...${C.reset}`);
+  console.log(`${C.dim}   Seeding: 6 agents, 10 decisions, 4 edges...${C.reset}\n`);
   const { project, agents, decisions } = await nx.seedSoftwareTeamDemo();
-  console.log(`${C.dim}   Project: ${project.id}${C.reset}\n`);
 
   // ══════════════════════════════════════════════════════════
   // SECTION 1: Role-Differentiated Compilation
   // ══════════════════════════════════════════════════════════
-  hr('1. SAME PROJECT, DIFFERENT AGENTS');
+  hr('1. SAME PROJECT — THREE AGENTS — THREE CONTEXTS');
+  console.log(`\n   ${C.dim}10 decisions about auth. 3 agents compile context for their task.${C.reset}`);
 
   const roles = [
     { name: 'builder',  task: 'Implement the auth middleware for API routes' },
@@ -119,50 +100,77 @@ async function main() {
     });
   }
 
-  // Print each role's top decisions
+  // ── Each role's #1 — the proof at a glance ──
+  console.log(`\n${C.bold}   Each role's #1 decision:${C.reset}\n`);
   for (const comp of compilations) {
-    const color = roleColor(comp.role);
-    console.log(`\n   ${color}${C.bold}${comp.role.toUpperCase()}${C.reset} ${C.dim}(${comp.count} decisions, ${comp.time}ms)${C.reset}`);
-    printDecisions(comp.role, comp.decisions);
+    const top = comp.decisions[0];
+    console.log(`   ${rc(comp.role).padEnd(30)} → ${top.decision.title} (${sc(top.combined_score)})`);
+  }
+  console.log(`\n   ${C.dim}Three agents. Three different top decisions. That's the point.${C.reset}`);
+
+  // ── Top decisions per role ──
+  for (const comp of compilations) {
+    console.log(`\n   ${rc(comp.role)} ${C.dim}(${comp.count} decisions, ${comp.time}ms)${C.reset}`);
+    for (const sd of comp.decisions.slice(0, 5)) {
+      console.log(`   ${sc(sd.combined_score)} │ ${sd.decision.title}`);
+    }
   }
 
-  // ── Side-by-side: same decision, different scores ──
-  console.log(`\n${C.bold}   Score comparison — same decision across roles:${C.reset}\n`);
+  // ── Side-by-side score comparison ──
+  // Collect top titles from ALL roles (not just builder) for fair comparison
+  const titleSet = new Set<string>();
+  for (const comp of compilations) {
+    for (const sd of comp.decisions.slice(0, 3)) {
+      titleSet.add(sd.decision.title);
+    }
+  }
+  const comparisonTitles = [...titleSet].slice(0, 6);
+
+  console.log(`\n${C.bold}   Same decision, different scores:${C.reset}\n`);
   console.log(`   ${'Decision'.padEnd(42)} ${'Builder'.padEnd(10)} ${'Reviewer'.padEnd(10)} ${'Launch'.padEnd(10)}`);
   console.log(`   ${'─'.repeat(42)} ${'─'.repeat(10)} ${'─'.repeat(10)} ${'─'.repeat(10)}`);
 
-  // Collect all unique decision titles from the first compilation
-  const topTitles = compilations[0].decisions.slice(0, 5).map(d => d.decision.title);
-  for (const title of topTitles) {
+  for (const title of comparisonTitles) {
     const scores = compilations.map(comp => {
       const found = comp.decisions.find(d => d.decision.title === title);
       return found ? found.combined_score : 0;
     });
     const truncTitle = title.length > 40 ? title.slice(0, 38) + '…' : title;
-    const scoreCells = scores.map(s => {
-      const color = scoreColor(s);
-      return `${color}${s > 0 ? s.toFixed(3) : '  —  '}${C.reset}`;
-    });
-    console.log(`   ${truncTitle.padEnd(42)} ${scoreCells.join('     ')}`);
+    const cells = scores.map(s => s > 0 ? sc(s) : `${C.dim}  —  ${C.reset}`);
+    console.log(`   ${truncTitle.padEnd(42)} ${cells.join('     ')}`);
   }
 
-  // ── Ordering difference proof ──
-  console.log(`\n${C.bold}   Each role's #1 decision:${C.reset}`);
-  for (const comp of compilations) {
-    const color = roleColor(comp.role);
-    const top = comp.decisions[0];
-    console.log(`   ${color}${comp.role.padEnd(10)}${C.reset} → ${top.decision.title} ${C.dim}(${top.combined_score.toFixed(3)})${C.reset}`);
+  // ── Strongest differentiation ──
+  let maxSpread = 0;
+  let spreadTitle = '';
+  for (const title of comparisonTitles) {
+    const scores = compilations.map(comp => {
+      const found = comp.decisions.find(d => d.decision.title === title);
+      return found ? found.combined_score : 0;
+    }).filter(s => s > 0);
+    if (scores.length >= 2) {
+      const spread = Math.max(...scores) - Math.min(...scores);
+      if (spread > maxSpread) { maxSpread = spread; spreadTitle = title; }
+    }
+  }
+  if (spreadTitle) {
+    console.log(`\n   ${C.bold}Widest score spread:${C.reset} "${spreadTitle}" — ${C.green}${maxSpread.toFixed(3)} gap${C.reset} across roles`);
   }
 
   // ══════════════════════════════════════════════════════════
   // SECTION 2: Change Propagation
   // ══════════════════════════════════════════════════════════
-  hr('2. CHANGE PROPAGATION');
+  hr('2. DECISION SUPERSEDED — CONTEXT UPDATES AUTOMATICALLY');
 
   const ssoDecision = decisions.find(d => d.title.includes('Delay SSO'));
   if (ssoDecision) {
-    console.log(`\n   ${C.dim}Superseding: "${ssoDecision.title}"${C.reset}`);
+    // Capture pre-supersede score for launch
+    const preLaunch = await nx.compileForAgent('launch', 'Write launch announcement', project.id);
+    const preScore = preLaunch.decisions.find(d => d.decision.id === ssoDecision.id);
 
+    console.log(`\n   ${C.dim}Before:${C.reset} "${ssoDecision.title}" scores ${preScore ? sc(preScore.combined_score) : C.dim + 'n/a' + C.reset} for launch`);
+
+    // Supersede
     const newDecision = await nx.supersedeDecision({
       project_id: project.id,
       title: 'Include SSO for enterprise beta only',
@@ -174,58 +182,56 @@ async function main() {
       tags: ['scope', 'requirements', 'enterprise', 'breaking_change'],
     });
 
-    console.log(`   ${C.green}New: "${newDecision.title}"${C.reset}\n`);
+    console.log(`   ${C.dim}Action:${C.reset} Superseded by "${C.green}${newDecision.title}${C.reset}"`);
 
-    // Show notifications per role
-    console.log(`${C.bold}   Role-specific notifications:${C.reset}`);
+    // Post-supersede compilation
+    const postLaunch = await nx.compileForAgent('launch', 'Write launch announcement', project.id);
+    const oldPost = postLaunch.decisions.find(d => d.decision.id === ssoDecision.id);
+    const newPost = postLaunch.decisions.find(d => d.decision.id === newDecision.id);
+
+    console.log(`\n   ${C.bold}After — launch context:${C.reset}`);
+    if (newPost) {
+      console.log(`   ${sc(newPost.combined_score)} │ ${newPost.decision.title} ${C.green}[new]${C.reset}`);
+    }
+    if (oldPost) {
+      console.log(`   ${sc(oldPost.combined_score)} │ ${oldPost.decision.title} ${C.red}[superseded — ×0.1 penalty]${C.reset}`);
+    }
+    if (preScore && oldPost) {
+      console.log(`\n   ${C.dim}Score drop:${C.reset} ${sc(preScore.combined_score)} → ${sc(oldPost.combined_score)} ${C.dim}(superseded penalty applied automatically)${C.reset}`);
+    }
+
+    // Role-specific notifications
+    console.log(`\n${C.bold}   Notifications — each role hears WHY it matters to them:${C.reset}`);
     for (const role of ['builder', 'launch', 'docs'] as const) {
       const notifs = await nx.getNotifications(agents[role].id, true);
       if (notifs.length > 0) {
         const n = notifs[0];
-        const color = roleColor(role);
-        console.log(`\n   ${color}${C.bold}${role.toUpperCase()}${C.reset}`);
-        console.log(`   ${C.dim}Message:${C.reset} ${n.message}`);
-        if (n.role_context) {
-          console.log(`   ${C.dim}Why it matters:${C.reset} ${n.role_context}`);
-        }
+        console.log(`\n   ${rc(role)}`);
+        console.log(`   ${n.message}`);
+        if (n.role_context) console.log(`   ${C.dim}${n.role_context}${C.reset}`);
       }
-    }
-
-    // Recompile to show superseded decision deprioritized
-    console.log(`\n${C.bold}   After supersede — recompile for launch:${C.reset}`);
-    const updated = await nx.compileForAgent('launch', 'Write launch announcement', project.id);
-    for (const sd of updated.decisions.slice(0, 4)) {
-      const sc = scoreColor(sd.combined_score);
-      const status = sd.decision.status === 'superseded' ? ` ${C.red}[superseded]${C.reset}` : '';
-      console.log(`   ${sc}${sd.combined_score.toFixed(3)}${C.reset} │ ${sd.decision.title}${status}`);
     }
   }
 
   // ══════════════════════════════════════════════════════════
-  // SUMMARY
+  // RESULT
   // ══════════════════════════════════════════════════════════
   const elapsed = ((performance.now() - t0) / 1000).toFixed(1);
+  hr('RESULT');
 
-  hr('WHY THE OUTPUTS DIFFERED');
   console.log(`
-   ${C.bold}Builder${C.reset} scored security + implementation decisions highest
-   because its role profile weights ${C.green}security${C.reset}, ${C.green}api${C.reset}, and ${C.green}architecture${C.reset} tags,
-   and most decisions directly ${C.green}affect${C.reset} the builder role.
+   ${C.bold}What just happened:${C.reset}
 
-   ${C.bold}Reviewer${C.reset} scored hashing + token rotation highest because
-   its profile weights ${C.magenta}security${C.reset} and ${C.magenta}implementation${C.reset} tags — the details
-   a reviewer needs to audit, not build.
+   10 decisions about auth. 3 agents compiled context.
+   Each got a different package — different scores, different order,
+   different included decisions — because their roles weight different signals.
 
-   ${C.bold}Launch${C.reset} scored scope + deprecation + feature flags highest
-   because its profile weights ${C.yellow}scope${C.reset}, ${C.yellow}requirements${C.reset}, and ${C.yellow}breaking_change${C.reset}
-   — what matters for an announcement, not implementation.
+   Then a decision was superseded. The old one dropped to ×0.1.
+   The new one appeared at full relevance. Each affected agent got
+   a notification framed for their role — not a generic broadcast.
 
-   ${C.bold}After supersede${C.reset}: the old SSO decision dropped to ${C.red}×0.1 penalty${C.reset}.
-   The new decision appeared with full relevance. Affected agents
-   got ${C.cyan}role-appropriate notifications${C.reset} explaining why it matters to them.
-
-   ${C.dim}Same project. Same decisions. Different agents. Different context.
-   Completed in ${elapsed}s.${C.reset}
+   ${C.bold}${C.cyan}Same project. Same decisions. Different agents. Different context.${C.reset}
+   ${C.dim}${elapsed}s total.${C.reset}
 `);
 }
 
