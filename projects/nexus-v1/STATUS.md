@@ -1,7 +1,7 @@
 # STATUS — Nexus v1
 
 **Current Phase**: Phase 8 — Skill Layer Construction — IN PROGRESS
-**Batch**: 5/8 (DevOps) COMPLETE, Batch 6 (Docs) next
+**Batch**: 6/8 (Docs) COMPLETE, Batch 7 (Product) next
 **Blockers**: None
 **Last Updated**: 2026-04-02 06:10 UTC+8
 
@@ -83,6 +83,26 @@
 **Fix**: Replace `const message = err instanceof Error ? err.message : 'Internal server error'` with `const message = 'Internal server error'`. Keep `console.error` for stderr logging. ~1 line changed.
 **Reference**: `agents/security/skills/SKILL-SENSITIVE-DATA-EXPOSURE-REVIEW.md` — Surface 1
 
+### SB-3: Server Startup Migration
+
+**Status**: Tracked — not yet implemented
+**Priority**: Must fix before production
+**Added**: 2026-04-02 11:11 UTC+8
+**File**: `packages/server/src/index.ts` — currently comments only, no startup logic
+**Issue**: Server entry point does not call `migrate()` before accepting HTTP requests. In production, a fresh deployment or schema update would serve requests against an un-migrated database.
+**Fix**: Call `migrate(pool, migrationsDir)` at startup, exit on error. Start HTTP listener only after migrations succeed.
+**Reference**: `agents/devops/skills/SKILL-MIGRATION-RUNNER-OPERATIONS.md` — "Option B (recommended)"
+
+### SB-4: Health Endpoint Auth Conflict
+
+**Status**: Tracked — not yet implemented
+**Priority**: Should fix before production
+**Added**: 2026-04-02 11:11 UTC+8
+**File**: `packages/server/src/middleware/auth.ts`, `packages/server/src/app.ts`
+**Issue**: `/api/health` is under `/api/*` scope, so auth middleware applies. Docker health checks and monitoring tools cannot provide a Bearer token. Health checks fail when `NEXUS_API_KEY` is set.
+**Fix**: Either exempt `/api/health` from auth (add early-return in middleware for health path) or document an authenticated health-check command pattern.
+**Reference**: `agents/devops/skills/SKILL-HEALTH-CHECK-VERIFICATION.md` — auth conflict section
+
 ---
 
 ## Performance Backlog
@@ -92,6 +112,7 @@
 **Status**: Tracked — not yet implemented
 **Priority**: Next after Phase 8 skill writing completes
 **Added**: 2026-04-02 09:52 UTC+8
+**Enforcement model**: Phase A (warn threshold, non-blocking) → Phase B (CI fail threshold, blocking)
 
 **Scope**:
 1. Generate test datasets at 4 sizes: 10, 50, 200, 1000 decisions (with edges, artifacts, agents)
@@ -106,8 +127,9 @@
    - 50 decisions: < 150ms
    - 200 decisions: < 500ms
    - 1000 decisions: < 2000ms
-5. Add automated performance test with threshold assertions (non-blocking CI initially)
-6. Verify sub-quadratic scaling: 2× decisions should take < 3× time
+5. Phase A: Add automated performance test with warn-level assertions (non-blocking CI)
+6. Phase B: Promote to CI-fail assertions after baselines are validated over ≥ 3 runs
+7. Verify sub-quadratic scaling: 2× decisions should take < 3× time
 
 **References**:
 - Skill: `agents/qa/skills/SKILL-COMPILATION-PERFORMANCE-VALIDATION.md`

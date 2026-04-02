@@ -216,8 +216,12 @@ Completion standard tightened: detect → resolve/classify → re-run verificati
 - Security findings: full SQL query audit (all parameterized, 4 dynamic patterns verified safe), no input length/array/enum validation. All with concrete fix code.
 - **SB-1 tracked**: Auth key timing-safe comparison — `auth.ts` uses `!==`, needs `timingSafeEqual`. Must fix before production.
 - **SB-2 tracked**: Generic 500 error messages — `errors.ts` leaks raw `err.message` in HTTP 500. Must fix before production.
+- **SB-3 tracked**: Server startup migration — `index.ts` has no `migrate()` call. Must fix before production.
+- **SB-4 tracked**: Health endpoint auth conflict — `/api/health` blocked by auth when `NEXUS_API_KEY` set. Should fix before production.
+- **PB-1 upgraded**: Staged enforcement — Phase A (warn, non-blocking) → Phase B (CI fail, blocking after ≥ 3 baseline runs).
 - Batch 5 (DevOps): 4 skills in `agents/devops/skills/` — POSTGRES-OPERATIONS (with mandatory dev-vs-production section + transition checklist), MIGRATION-RUNNER-OPERATIONS, DOCKER-COMPOSE-MANAGEMENT, HEALTH-CHECK-VERIFICATION
-- Remaining: Docs (3), Product (3), Demo/Consumer (2)
+- Batch 6 (Docs): 3 skills in `agents/docs/skills/` — API-REFERENCE-GENERATION, SDK-USAGE-GUIDE, DECISION-CONTEXT-EXPLANATION. All source-of-truth mapped: API ref derives from app.ts+routes.test.ts, SDK guide from client.ts+e2e.test.ts, concept explanation from KEY-MESSAGING.md+comparison.ts+ROLE-DIFFERENTIATION-PROOF.md.
+- Remaining: Product (3), Demo/Consumer (2)
 
 ---
 
