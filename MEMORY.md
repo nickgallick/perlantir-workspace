@@ -321,3 +321,41 @@ workspace/projects/            NEXUS-CAPABILITY-LAYER-PLAN.md
 6. IDENTITY.md, BOOT.md still minimal
 
 Nick decides scope. No phase starts without approval.
+
+---
+
+## Phase A: Live Value Validation (2026-04-03)
+
+**Status**: Planning complete, awaiting operator approval
+
+**What Phase A Is**
+Prove Nexus improves real OpenClaw execution. Governor uses Nexus to:
+1. Compile decision-aware context before dispatching specialists
+2. Record decisions as specialists work
+3. Update decision statuses on phase completion
+4. Show that superseding a decision changes downstream context
+
+**Success Rubric (Non-Negotiable)**
+- A-1: ≥2 specialist tasks with Nexus-compiled context (not demo seeded data)
+- A-2: ≥1 real decision from live work (not pre-loaded)
+- A-3: ≥1 supersede event that changes compiled context
+- A-4: Operator judgment: did Nexus reduce friction vs. manual context loading?
+
+**Work Plan**
+1. **Task 1 (Architect)**: Design Governor ↔ Nexus protocol (5 integration points, workflows, examples)
+   - Deliverable: PHASE-A-INTEGRATION-PROTOCOL.md (complete)
+   - Decisions: 5 created, status "pending", awaiting approval
+2. **Task 2 (Backend)**: Implement SDK integration + logging
+   - Deliverable: SDK methods, logging, 3 decisions, 1 supersede event
+3. **Task 3 (QA)**: Verify supersede changes compiled context
+   - Deliverable: Test + before/after evidence
+
+**Created Artifacts** (2026-04-03 01:25 UTC+8)
+- `projects/nexus-v1/PHASE-A-INTEGRATION-PROTOCOL.md` — Protocol (complete, ready for exec)
+- `projects/nexus-v1/PHASE-A-TASK-BREAKDOWN.md` — Task plan
+- `projects/nexus-v1/PHASE-A-ARCHITECT-CONTRACT.md` — Architect specialist contract
+- `projects/nexus-v1/STATUS.md` — Phase A progress tracking
+- `projects/nexus-v1/CHECKPOINT.md` — Execution recovery state
+- Message to Nick: operator approval request sent
+
+**Next Step**: Operator approval for Task 1 dispatch. If approved, Architect work begins immediately.

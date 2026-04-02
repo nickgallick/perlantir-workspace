@@ -1,135 +1,124 @@
-# STATUS — Nexus v1
+# STATUS.md — Phase A Live Value Validation
 
-**Current Phase**: Post-V1 Roadmap — COMPLETE
-**Sub-phase**: Roadmap created, awaiting Phase A approval
-**Blockers**: None — Phase A (Live OpenClaw Integration) ready to begin on approval
-**Last Updated**: 2026-04-02 21:04 UTC+8
-
-## Post-V1 Roadmap
-
-See `POST-V1-ROADMAP.md` for full roadmap. Execution order:
-- **Phase A**: Live OpenClaw Integration (Governor ↔ Nexus protocol, real decision recording)
-- **Phase B**: Production Hardening (PB-1, input validation, logging)
-- **Phase C**: Capability Expansion (WebSocket, distillery, per-project keys)
-- **Phase D**: Platform Integration (Hermes, ruflo — blocked on dependencies)
-
-## Build Health
-
-- **Build**: 3/3 packages, zero errors
-- **Tests**: 214/214 pass (11 test files: 8 core + 2 SDK + 1 server)
-- **Regressions**: None
-
-## Completed Days
-
-| Day | Scope | Tests | Status |
-|-----|-------|-------|--------|
-| 1 | Setup + scaffold | 17 | ✅ LOCKED |
-| 2 | Decision Graph | 30 | ✅ LOCKED |
-| 3 | Scoring Layer | 43 | ✅ LOCKED |
-| 4 | Assembly (packer, formatter, compiler, graph expansion) | 25 | ✅ LOCKED |
-| 4+ | Proof Lock (role-differentiation regression) | 11 | ✅ LOCKED |
-| 5 | Critical Test + Change Propagator | 24 | ✅ LOCKED |
-| 6a | SDK Client + Seed Method + Demo Script | 9 | ✅ LOCKED |
-| 6b | API Server (Hono) + E2E Tests | 27 | ✅ LOCKED |
-| 7 | SDK Ergonomics + E2E + Demo Polish | 27 | ✅ COMPLETE |
-
-## Day 7 Summary — SDK Ergonomics + Demo + Developer Path
-
-### SDK Enhancements
-- **Error handling**: `NexusApiError` class preserving server error envelope (status, code, serverMessage, details)
-- **Missing methods added**: `updateDecisionStatus`, `createEdge`, `listEdges`, `deleteEdge`, `listArtifacts`, `health()`
-- **Type improvements**: `ConnectedDecision` return type for graph, `HealthResponse` type, `NexusErrorEnvelope` type
-- **Full server surface coverage**: Every server route now has a corresponding SDK method
-
-### SDK E2E Tests (27 new)
-- Health, error handling (3 tests), project CRUD, agent CRUD, decision CRUD (5), edge CRUD (4), artifact CRUD (2), graph (1), compile (3), role differentiation proof (2), notifications (2), full lifecycle (1)
-- All tests route through actual Hono app via fetch interception — real DB, real compilation
-
-### Demo Script Polish
-- 4-section demo: baseline vs Nexus vs change propagation vs SDK ergonomics
-- Health check on startup with typed error handling
-- Artifact registration in demo flow
-- Edge/graph/error handling showcase sections
-
-### What is fully implemented vs deferred
-
-**Fully implemented:**
-- SDK covers 100% of server routes with typed methods
-- Typed error handling (NexusApiError preserves server envelope)
-- Convenience helpers (createRoleAgent, compileForAgent, recordDecisionWithEdges, seedSoftwareTeamDemo)
-- Core type re-exports (consumers don't need @nexus-ai/core directly)
-- Role template utilities re-exported
-- End-to-end demo script using only SDK
-- E2E tests proving SDK boundary works with real DB
-
-**Deferred:**
-- Per-project API keys, key rotation, rate limiting, scoped permissions
-- WebSocket real-time push endpoint
-- Demo requires running server (no in-process mode yet)
+**Updated**: 2026-04-03 01:28 UTC+8
+**Phase**: A (Live OpenClaw Integration)
+**Status**: AWAITING OPERATOR APPROVAL
 
 ---
 
-## Security Backlog
+## Phase A Overview
 
-### SB-1: Auth Key Timing-Safe Comparison
+**Objective**: Prove Nexus improves real OpenClaw execution (not demo). Must satisfy A-1 through A-4.
 
-**Status**: ✅ RESOLVED — Phase 9 (H-1)
-**Resolved**: 2026-04-02 11:53 UTC+8
-**Fix applied**: `crypto.timingSafeEqual` with length-safe buffer padding in `packages/server/src/middleware/auth.ts`
-
-### SB-2: Generic 500 Error Messages
-
-**Status**: ✅ RESOLVED — Phase 9 (H-2)
-**Resolved**: 2026-04-02 11:53 UTC+8
-**Fix applied**: Static `'Internal server error'` in unhandled error path. Test verifies no raw error leak.
-
-### SB-3: Server Startup Migration
-
-**Status**: ✅ RESOLVED — Phase 9 (H-3)
-**Resolved**: 2026-04-02 11:53 UTC+8
-**Fix applied**: `startServer()` calls `migrate()` before accepting HTTP requests. Exits on failure.
-
-### SB-4: Health Endpoint Auth Conflict
-
-**Status**: ✅ RESOLVED — Phase 9 (H-4)
-**Resolved**: 2026-04-02 11:53 UTC+8
-**Fix applied**: `/api/health` exempt from auth middleware. Tests verify unauthenticated access succeeds.
+**Work Structure**: 3 specialist tasks (Architect → Backend → QA) generating 8+ decisions from live work.
 
 ---
 
-## Performance Backlog
+## Current State
 
-### PB-1: Compilation Performance Baseline + Regression Guard
+### Planning (COMPLETE)
+- ✅ Integration protocol designed: `PHASE-A-INTEGRATION-PROTOCOL.md`
+- ✅ Task breakdown: `PHASE-A-TASK-BREAKDOWN.md`
+- ✅ Architect contract: `PHASE-A-ARCHITECT-CONTRACT.md`
+- ✅ Governor approval requested (2026-04-03 01:25 UTC+8)
 
-**Status**: Tracked — not yet implemented
-**Priority**: Next after Phase 8 skill writing completes
-**Added**: 2026-04-02 09:52 UTC+8
-**Enforcement model**: Phase A (warn threshold, non-blocking) → Phase B (CI fail threshold, blocking)
+### Evidence Checklist (In Progress)
 
-**Scope**:
-1. Generate test datasets at 4 sizes: 10, 50, 200, 1000 decisions (with edges, artifacts, agents)
-2. Measure `compile()` latency broken down by subsystem:
-   - Scoring throughput (pure computation, per-decision)
-   - Graph traversal cost (recursive SQL, per qualifying decision × depth)
-   - Packing time (sort + greedy scan)
-   - Total `compilation_time_ms` end-to-end
-3. Capture baseline timings on current hardware (8-core x86_64, 31 GiB RAM, PG17 local)
-4. Define acceptable thresholds per size:
-   - 10 decisions: < 50ms
-   - 50 decisions: < 150ms
-   - 200 decisions: < 500ms
-   - 1000 decisions: < 2000ms
-5. Phase A: Add automated performance test with warn-level assertions (non-blocking CI)
-6. Phase B: Promote to CI-fail assertions after baselines are validated over ≥ 3 runs
-7. Verify sub-quadratic scaling: 2× decisions should take < 3× time
+| Evidence | Target | Current | Status |
+|----------|--------|---------|--------|
+| A-1: ≥2 specialist tasks with compiled context | 2 tasks | 0 tasks | Pending |
+| A-2: ≥1 real decision from live work | 8 decisions | 0 decisions | Pending |
+| A-3: ≥1 supersede event changes context | 1 event | 0 events | Pending |
+| A-4: Operator judgment on friction reduction | 1 statement | Pending | Pending |
 
-**References**:
-- Skill: `agents/qa/skills/SKILL-COMPILATION-PERFORMANCE-VALIDATION.md`
-- Invariants: `projects/nexus-v1/shared/NEXUS-SYSTEM-INVARIANTS.md` (INV-4 Determinism, INV-7 Budget Respect)
-- Pipeline: `packages/core/src/context-compiler/compiler.ts`
+### Task Status
 
-**Deliverables**:
-- Performance test file (`packages/core/tests/performance.test.ts`)
-- Baseline measurements document
-- Threshold assertions (conservative: 2× expected, to avoid flaky CI)
-- Scaling linearity assertion
+| Task | Specialist | Role | Status | Deliverables |
+|------|-----------|------|--------|--------------|
+| 1 | Architect | architect | Awaiting dispatch | PHASE-A-INTEGRATION-PROTOCOL.md + 5 decisions |
+| 2 | Backend | backend | Awaiting Task 1 | SDK methods + 3 decisions + 1 supersede |
+| 3 | QA | qa | Awaiting Task 2 | Supersede test + evidence + 1 decision |
+
+---
+
+## Decisions Created (Phase A)
+
+| ID | Title | Created By | Status | Tags | Links |
+|----|----|-----------|--------|------|-------|
+| DECISION-001 | Governor should compile before every specialist dispatch | Architect (pending) | pending | phase-a, integration | — |
+| DECISION-002 | Decisions recorded after phase completion | Architect (pending) | pending | phase-a, integration | — |
+| DECISION-003 | Specialist can self-serve context refresh mid-task | Architect (pending) | pending | phase-a, integration | — |
+| DECISION-004 | Change Propagator checks before dispatch | Architect (pending) | pending | phase-a, integration | — |
+| DECISION-005 | Protocol integration points + workflow | Architect (pending) | pending | phase-a, integration | — |
+| DECISION-006 | SDK client needs compile() method | Backend (pending) | pending | phase-a, implementation | depends on 001–005 |
+| DECISION-007 | Governor logs all compile calls | Backend (pending) | pending | phase-a, implementation | depends on 001–005 |
+| DECISION-008 | Notification check before dispatch | Backend (pending) | pending | phase-a, implementation | depends on 001–005 |
+
+**Total**: 8 decisions planned, 0 created yet (awaiting task execution)
+
+---
+
+## Files Touched (Phase A)
+
+### Created
+- `projects/nexus-v1/PHASE-A-INTEGRATION-PROTOCOL.md` (2026-04-03)
+- `projects/nexus-v1/PHASE-A-TASK-BREAKDOWN.md` (2026-04-03)
+- `projects/nexus-v1/PHASE-A-ARCHITECT-CONTRACT.md` (2026-04-03)
+- `projects/nexus-v1/STATUS.md` (this file, 2026-04-03)
+- `projects/nexus-v1/CHECKPOINT.md` (to be created)
+- `nexus/packages/sdk/src/governor-integration.ts` (planned Task 2)
+- `nexus/packages/server/src/logging.ts` (planned Task 2)
+- Nexus DB decisions (via SDK, not files)
+
+### Modified
+- None yet
+
+### Deleted
+- None
+
+---
+
+## Next Steps
+
+1. **Operator approval required** — Review protocol, task breakdown, rubric
+   - If approved: Dispatch Task 1 to Architect
+   - If modifications needed: Revise protocol, re-present
+2. **After Task 1 complete** — Architect delivers protocol + 5 decisions
+3. **After Task 2 complete** — Backend implements + 3 decisions + supersede event
+4. **After Task 3 complete** — QA verifies supersede + generates evidence
+5. **Evidence collection** — Compile A-1 through A-4 documentation
+6. **Operator judgment (A-4)** — Nick reviews and decides: proceed to Phase B or loop Phase A?
+
+---
+
+## Risks & Mitigations
+
+| Risk | Impact | Mitigation | Status |
+|------|--------|-----------|--------|
+| Operator judges Nexus added friction | Phase A loops or fails | A-4 is kill switch; looping permitted | Mitigated |
+| Compiled context is stale | A-1 evidence invalid | Change Propagator + re-compile before dispatch | Mitigated |
+| Decision recording is slow | Phase work exceeds timeline | Monitor decision recording time in Task 2 | Monitoring |
+| Specialist doesn't use context | A-1 evidence gap | Task 2 + Task 3 log context usage | Monitoring |
+
+---
+
+## Assumptions
+
+1. Operator will provide explicit approval for Task 1 dispatch
+2. Nexus server (Hono) can be started and stay running during Phase A
+3. PostgreSQL is available for decision storage (dev environment)
+4. Specialists have access to Nexus SDK and can import it
+5. No other major work is competing for Governor's attention during Phase A
+
+---
+
+## Links
+
+- Protocol: `PHASE-A-INTEGRATION-PROTOCOL.md`
+- Tasks: `PHASE-A-TASK-BREAKDOWN.md`
+- Architect contract: `PHASE-A-ARCHITECT-CONTRACT.md`
+- Roadmap: `POST-V1-ROADMAP.md`
+
+---
+
+**Awaiting operator approval to proceed to Task 1 dispatch.**

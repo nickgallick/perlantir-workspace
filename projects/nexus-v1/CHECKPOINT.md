@@ -1,127 +1,142 @@
-# CHECKPOINT — Nexus v1
+# CHECKPOINT.md — Phase A Execution State
+
+**Last Updated**: 2026-04-03 01:30 UTC+8
+**Phase**: A (Live Value Validation)
+**Status**: INITIAL (awaiting operator approval)
 
 ---
 
-## Schema and Provenance
+## Execution State
+
+### Current Phase & Task
+- **Phase**: A (Live OpenClaw Integration)
+- **Current Task**: Planning complete, awaiting operator approval for Task 1 dispatch
+- **Last Completed**: Protocol design and task breakdown (2026-04-03 01:15 UTC+8)
+
+### Recovery Point
+
+If this session ends, next session should:
+1. Read `PHASE-A-INTEGRATION-PROTOCOL.md` (already complete)
+2. Check operator approval status in chat history
+3. If approved: Dispatch Task 1 to Architect
+4. If not approved: Await approval or rework protocol
+
+### Execution Trace
 
 ```
-schema-version      : 1.0.0
-checkpoint-id       : 016
-prior-checkpoint-id : 015
-last-writer         : Governor
-last-updated        : 2026-04-02 21:04 UTC+8
-active-owner        : Governor
-lock-status         : UNLOCKED
+2026-04-03 01:15 UTC+8 — Created PHASE-A-INTEGRATION-PROTOCOL.md
+2026-04-03 01:22 UTC+8 — Created PHASE-A-TASK-BREAKDOWN.md
+2026-04-03 01:25 UTC+8 — Created PHASE-A-ARCHITECT-CONTRACT.md
+2026-04-03 01:28 UTC+8 — Created STATUS.md
+2026-04-03 01:30 UTC+8 — Created CHECKPOINT.md
+2026-04-03 01:25 UTC+8 — Sent operator message requesting approval
 ```
 
----
+### Decisions Created in Phase A
 
-## Project and Phase
+| Decision ID | Title | Status | Created By | Created At |
+|-------------|-------|--------|------------|-----------|
+| (none yet) | — | — | — | — |
 
-```
-project             : Nexus v1
-phase               : Post-V1 Roadmap
-approval-category   : 2
-approval-phrase     : "Proceed to create the post-v1 roadmap"
-approval-timestamp  : 2026-04-02 21:04 UTC+8
-approved-scope      : POST-V1-ROADMAP.md creation — 5 sections, phase-based execution order
-approval-freshness  : FRESH
-lifecycle           : ROADMAP-DEFINED
-status              : AWAITING-PHASE-A-APPROVAL
-session-termination : CLEAN
-recovery-mode       : NORMAL
-```
+**Total Decisions**: 0 created, 8 planned
 
----
+### Decisions Superseded in Phase A
 
-## Deliverables
+| Old ID | New ID | Type | Approved |
+|--------|--------|------|----------|
+| (none yet) | — | — | — |
 
-### Phase 8 Output — 33 skill files + 1 shared artifact
+**Total Supersedes**: 0 executed, 1 planned (Task 2)
 
-**Batch 1 — Backend (6 skills):**
-- [x] `agents/backend/skills/SKILL-DECISION-CRUD.md` (135 lines)
-- [x] `agents/backend/skills/SKILL-SCORING-IMPLEMENTATION.md` (120 lines)
-- [x] `agents/backend/skills/SKILL-MIGRATION-AUTHORING.md` (142 lines)
-- [x] `agents/backend/skills/SKILL-CONTEXT-COMPILER-PIPELINE.md` (176 lines)
-- [x] `agents/backend/skills/SKILL-DATA-CONTRACT-INTEGRITY.md` (147 lines)
-- [x] `agents/backend/skills/SKILL-CHANGE-PROPAGATOR.md` (168 lines)
+### Evidence Collected
 
-**Batch 2 — Architect (5 skills):**
-- [x] `agents/architect/skills/SKILL-SCHEMA-EVOLUTION.md` (148 lines)
-- [x] `agents/architect/skills/SKILL-API-CONTRACT-DESIGN.md` (184 lines)
-- [x] `agents/architect/skills/SKILL-SYSTEM-INVARIANT-ENFORCEMENT.md` (82 lines — references shared invariant registry)
-- [x] `agents/architect/skills/SKILL-PACKAGE-BOUNDARY-ENFORCEMENT.md` (144 lines)
-- [x] `agents/architect/skills/SKILL-SCORING-FORMULA-TUNING.md` (146 lines)
+| Evidence | Status | Details |
+|----------|--------|---------|
+| A-1: ≥2 tasks with compiled context | Pending | 0/2 tasks executed |
+| A-2: ≥1 real decision from live work | Pending | 0/8 decisions created |
+| A-3: ≥1 supersede event changes context | Pending | 0/1 supersedes executed |
+| A-4: Operator judgment | Pending | Awaiting task completion |
 
-**Shared artifact (extracted from Batch 2):**
-- [x] `projects/nexus-v1/shared/NEXUS-SYSTEM-INVARIANTS.md` — 10 invariants (INV-1 through INV-10), canonical cross-agent reference
+### Issues & Blockers
 
-**Batch 3 — QA (5 skills):**
-- [x] `agents/qa/skills/SKILL-INTEGRATION-TEST-AUTHORING.md` (171 lines)
-- [x] `agents/qa/skills/SKILL-ROLE-DIFFERENTIATION-VERIFICATION.md` (140 lines)
-- [x] `agents/qa/skills/SKILL-SCENARIO-CONSTRUCTION.md` (144 lines)
-- [x] `agents/qa/skills/SKILL-REGRESSION-DETECTION.md` (137 lines)
-- [x] `agents/qa/skills/SKILL-COMPILATION-PERFORMANCE-VALIDATION.md` (166 lines)
-
-**Batch 4 — Security (5 skills):**
-- [x] `agents/security/skills/SKILL-API-INPUT-VALIDATION.md` (181 lines)
-- [x] `agents/security/skills/SKILL-SQL-INJECTION-AUDIT.md` (175 lines)
-- [x] `agents/security/skills/SKILL-SENSITIVE-DATA-EXPOSURE-REVIEW.md` (186 lines)
-- [x] `agents/security/skills/SKILL-AUTH-MIDDLEWARE-REVIEW.md` (164 lines)
-- [x] `agents/security/skills/SKILL-DEPENDENCY-AUDIT.md` (144 lines)
-
-**Batch 5 — DevOps (4 skills):**
-- [x] `agents/devops/skills/SKILL-POSTGRES-OPERATIONS.md` (129 lines)
-- [x] `agents/devops/skills/SKILL-MIGRATION-RUNNER-OPERATIONS.md` (182 lines)
-- [x] `agents/devops/skills/SKILL-DOCKER-COMPOSE-MANAGEMENT.md` (142 lines)
-- [x] `agents/devops/skills/SKILL-HEALTH-CHECK-VERIFICATION.md` (126 lines)
-
-**Batch 6 — Docs (3 skills):**
-- [x] `agents/docs/skills/SKILL-API-REFERENCE-GENERATION.md` (124 lines)
-- [x] `agents/docs/skills/SKILL-SDK-USAGE-GUIDE.md` (184 lines)
-- [x] `agents/docs/skills/SKILL-DECISION-CONTEXT-EXPLANATION.md` (124 lines)
-
-**Batch 7 — Product (3 skills):**
-- [x] `agents/product/skills/SKILL-SCOPE-GATE-ENFORCEMENT.md` (128 lines)
-- [x] `agents/product/skills/SKILL-ROLE-TEMPLATE-DESIGN.md` (148 lines)
-- [x] `agents/product/skills/SKILL-DEMO-SCENARIO-CURATION.md` (156 lines)
-
-**Batch 8 — Demo/Consumer (2 skills):**
-- [x] `agents/frontend/skills/SKILL-SDK-CONSUMER-PATTERNS.md` (207 lines)
-- [x] `agents/frontend/skills/SKILL-DEMO-SCRIPT-AUTHORING.md` (172 lines)
-
-### Tracked Follow-Up Items (from Phase 8 findings)
-
-| ID | Item | Priority | Status |
-|----|------|----------|--------|
-| SB-1 | Auth key timing-safe comparison | Must fix before production | Tracked |
-| SB-2 | Generic 500 error messages | Must fix before production | Tracked |
-| SB-3 | Server startup migration | Must fix before production | Tracked |
-| SB-4 | Health endpoint auth conflict | Should fix before production | Tracked |
-| PB-1 | Compilation performance baseline + regression guard | Next after Phase 8 | Tracked (staged: Phase A warn → Phase B CI fail) |
-
-### Verification
-
-- 33 skill files across 8 agent directories
-- 5,022 total lines
-- 1 shared artifact (`NEXUS-SYSTEM-INVARIANTS.md`)
-- No build/test changes (skills are documentation, not code)
-- All existing tests remain at 213/213 pass
+| Issue | Severity | Status | Notes |
+|-------|----------|--------|-------|
+| Operator approval required | BLOCKING | Pending | Protocol sent for approval 2026-04-03 01:25 |
+| PostgreSQL availability | MEDIUM | OK | Available in prior sessions; assume available |
+| Nexus server startup | MEDIUM | TBD | Server must run during Phase A for decision storage |
 
 ---
 
-## Deviations
+## Session Handoff
 
-None. All 33 planned skills written per revised plan.
+**If this session ends and another begins:**
+
+1. **Check approval**: Read recent messages in Nick's chat for Phase A approval
+2. **If approved**: Dispatch Task 1 immediately
+   - Architect contract ready at `PHASE-A-ARCHITECT-CONTRACT.md`
+   - Compile context would include: Nexus v1 decisions, Governor standards, locked decisions
+3. **If not approved**: Wait for approval or rework protocol based on feedback
+4. **If issues**: Check STATUS.md "Risks & Mitigations" section
+
+**Critical Files:**
+- Protocol: `projects/nexus-v1/PHASE-A-INTEGRATION-PROTOCOL.md`
+- Task plan: `projects/nexus-v1/PHASE-A-TASK-BREAKDOWN.md`
+- Architect contract: `projects/nexus-v1/PHASE-A-ARCHITECT-CONTRACT.md`
+- Status: `projects/nexus-v1/STATUS.md` (this directory)
+
+**Operator Decision Point:**
+- Review PHASE-A-INTEGRATION-PROTOCOL.md
+- Approve Task 1 dispatch OR request modifications
 
 ---
 
-## Next Phase
+## Context for Next Session
 
-Awaiting operator directive. Candidates:
-- Implement SB-1 through SB-4 (security/production hardening)
-- PB-1 Phase A (performance baseline)
-- Day 8 implementation (server standalone runner, Docker compose, README)
-- Phase 1B capability files (9 scoped, not started)
+### What Phase A Is
+Governor ↔ Nexus integration proof. Governor uses Nexus to compile decision-aware context before dispatching specialists. Specialists record decisions as they work. Result: evidence that Nexus reduces manual context loading.
 
-Requires explicit approval.
+### What's Been Done
+- Protocol designed (5 integration points, workflows, examples)
+- 3 tasks scoped (Architect → Backend → QA)
+- 4 specialist contracts/documents created
+- STATUS.md and this CHECKPOINT.md created
+
+### What's Next
+- Operator approval for Task 1
+- Architect designs protocol (Cycle 1: done, just needs approval)
+- Backend implements integration (Cycle 2)
+- QA verifies supersede scenario (Cycle 3)
+- Operator judges whether Nexus reduced friction (A-4)
+
+### What Would Break This
+- Operator says "this protocol is too complex" → loop with simplification
+- Nexus server fails to start → use mock/stub for Phase A
+- Database unavailable → use in-memory decision store for Phase A only
+- Time pressure → Phase A can be shortened if evidence is collected by Day 2
+
+---
+
+## Persistence Rules
+
+This CHECKPOINT.md is the execution recovery point. Update it when:
+
+- ✅ Operator approves Phase A (add approval timestamp)
+- ✅ Task 1 starts (add task start + assigned specialist)
+- ✅ Task 1 completes (add completion timestamp + deliverable locations)
+- ✅ First decision created (log decision ID + timestamp)
+- ✅ First evidence collected (log which evidence, timestamp)
+- ✅ Task 2 starts (add task start)
+- ✅ Supersede event created (log old ID → new ID, timestamp)
+- ✅ Task 3 starts (add task start)
+- ✅ Task 3 completes (add evidence file location)
+- ✅ A-4 judgment received (log operator statement)
+
+**Do not update CHECKPOINT for routine decisions.** Only update for:
+- Work transitions (task start/end)
+- Major evidence collection
+- Blockers or escalations
+- Session boundaries
+
+---
+
+**Ready for execution. Awaiting operator approval.**
