@@ -1,7 +1,7 @@
 # STATUS — Nexus v1
 
-**Current Phase**: Day 7 (SDK Ergonomics + Demo + Developer Path) — COMPLETE
-**Next Phase**: Day 8+ (scoping TBD, awaiting approval)
+**Current Phase**: Phase 8 — Skill Layer Construction — IN PROGRESS
+**Batch**: 1/8 (Backend) COMPLETE, Batch 2 (Architect) next
 **Blockers**: None
 **Last Updated**: 2026-04-02 06:10 UTC+8
 
