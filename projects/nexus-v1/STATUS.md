@@ -1,9 +1,9 @@
 # STATUS — Nexus v1
 
-**Current Phase**: V1 COMPLETE
-**Sub-phase**: All blockers closed, final packaging done
+**Current Phase**: Post-V1 Polish
+**Sub-phase**: Polish plan written, awaiting execution
 **Blockers**: None
-**Last Updated**: 2026-04-02 15:00 UTC+8
+**Last Updated**: 2026-04-02 15:37 UTC+8
 
 ## Build Health
 
